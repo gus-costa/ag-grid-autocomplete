@@ -50,7 +50,8 @@ describe('autocomplete end-to-end basic tests', () => {
     cy.get('#autocompleter').type(inputText)
     // Should show the select list on the page
     cy.get('.autocomplete')
-    cy.get('html').trigger('mousemove', 'bottomRight').click()
+    cy.get('html').trigger('mousemove', 'bottomRight')
+    cy.get('html').click()
     cy.get('.autocomplete').should('not.exist')
   })
   it('should not call onSelect when outside click is detected', function () {
@@ -78,7 +79,8 @@ describe('autocomplete end-to-end basic tests', () => {
     cy.get('#autocompleter').type(inputText)
     // Should show the select list on the page
     cy.get('.autocomplete')
-    cy.get('html').trigger('mousemove', 'bottomRight').click()
+    cy.get('html').trigger('mousemove', 'bottomRight')
+    cy.get('html').click()
     cy.get('.autocomplete').should('not.exist')
     cy.get('#autocompleter').then((indexQueryElement) => {
       expect(indexQueryElement.val()).to.be.equal(inputText)

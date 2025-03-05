@@ -1,8 +1,9 @@
 const tsExtends = [
+  'airbnb-base',
   'airbnb-typescript/base',
   'plugin:prettier/recommended',
   'plugin:unicorn/recommended',
-  'plugin:radar/recommended',
+  'plugin:sonarjs/recommended-legacy',
 ]
 const CYPRESS_TS_OVERRIDE = {
   files: ['cypress/**/*.ts'],
@@ -12,8 +13,8 @@ const CYPRESS_TS_OVERRIDE = {
   },
   extends: [...tsExtends, 'plugin:cypress/recommended', 'plugin:chai-friendly/recommended'],
   rules: {
-    'radar/no-duplicate-string': 'off',
-    'radar/no-identical-functions': 'off',
+    'sonarjs/no-duplicate-string': 'off',
+    'sonarjs/no-identical-functions': 'off',
     'no-new': 'off',
     'func-names': 'off',
     '@typescript-eslint/no-unused-expressions': 'off',

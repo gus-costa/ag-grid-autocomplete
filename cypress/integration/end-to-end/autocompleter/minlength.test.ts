@@ -31,7 +31,7 @@ describe('autocomplete end-to-end minlength tests', () => {
     cy.get('#autocompleter').type(inputText.slice(0, -1))
     // The minLength is not set, the list should not exist
     cy.get('.autocomplete').should('not.exist')
-    cy.get('#autocompleter').type(inputText.slice(-1, inputText.length))
+    cy.get('#autocompleter').type(inputText.slice(-1))
     // Should show the select list on the page
     cy.get('.autocomplete')
   })
@@ -66,7 +66,8 @@ describe('autocomplete end-to-end minlength tests', () => {
     cy.get('.autocomplete').should('not.exist')
 
     // Type anything in the input, then delete to empty.
-    cy.get('#autocompleter').type('randomText').clear()
+    cy.get('#autocompleter').type('randomText')
+    cy.get('#autocompleter').clear()
     // Should show the select list on the page
     cy.get('.autocomplete')
   })

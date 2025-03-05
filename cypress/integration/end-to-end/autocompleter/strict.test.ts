@@ -29,7 +29,9 @@ describe('autocomplete end-to-end strict tests', () => {
       })
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       expect(indexQueryElement.val()).to.be.equal('undefined')
@@ -57,16 +59,15 @@ describe('autocomplete end-to-end strict tests', () => {
       autocomplete(autocompleteSettings as AutocompleteSettings<AutocompleteItem>)
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter')
-      .type(inputText)
-      .type('{downarrow}')
-      .type('{enter}')
-      .then(() => {
-        expect(spyOnSelect).to.be.calledOnce
-        // eslint-disable-next-line unicorn/no-useless-undefined
-        expect(spyOnSelect.getCall(0).args[0]).to.eql(undefined)
-        expect(spyFreeTextSelect).to.not.be.called
-      })
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
+    cy.get('#autocompleter').then(() => {
+      expect(spyOnSelect).to.be.calledOnce
+      // eslint-disable-next-line unicorn/no-useless-undefined
+      expect(spyOnSelect.getCall(0).args[0]).to.eql(undefined)
+      expect(spyFreeTextSelect).to.not.be.called
+    })
   })
   it('should call onSelect actual input when strict is false and no elements from fetch', function () {
     const inputText = 'United'
@@ -93,7 +94,9 @@ describe('autocomplete end-to-end strict tests', () => {
       })
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       expect(indexQueryElement.val()).to.be.equal('United')
@@ -121,15 +124,14 @@ describe('autocomplete end-to-end strict tests', () => {
       autocomplete(autocompleteSettings as AutocompleteSettings<AutocompleteItem>)
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter')
-      .type(inputText)
-      .type('{downarrow}')
-      .type('{enter}')
-      .then(() => {
-        expect(spyOnSelect).to.be.calledOnce
-        expect(spyOnSelect.getCall(0).args[0]).to.eql({ label: inputText })
-        expect(spyFreeTextSelect).to.be.calledOnce
-        expect(spyFreeTextSelect.getCall(0).args[0]).to.eql({ label: inputText })
-      })
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
+    cy.get('#autocompleter').then(() => {
+      expect(spyOnSelect).to.be.calledOnce
+      expect(spyOnSelect.getCall(0).args[0]).to.eql({ label: inputText })
+      expect(spyFreeTextSelect).to.be.calledOnce
+      expect(spyFreeTextSelect.getCall(0).args[0]).to.eql({ label: inputText })
+    })
   })
 })

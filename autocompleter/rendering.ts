@@ -25,7 +25,7 @@ export function renderItems<T extends AutocompleteItem>(
   inputValue: string,
   clickHandler: (item: T, event: MouseEvent) => void,
   render: RenderFunction<T> = defaultRender,
-  renderGroup: RenderGroupFunction = defaultRenderGroup
+  renderGroup: RenderGroupFunction = defaultRenderGroup,
 ): DocumentFragment {
   const fragment = document.createDocumentFragment()
   const elements: HTMLElement[] = []

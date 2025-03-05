@@ -33,18 +33,17 @@ const KEYS_TO_IGNORE = new Set([
   Keys.Tab,
 ])
 const DEFAULT_MIN_LENGTH = 2
-export { AutocompleteItem, EventTrigger, AutocompleteSettings }
 
 export default function autocomplete<T extends AutocompleteItem>(
-  settings: AutocompleteSettings<T>
+  settings: AutocompleteSettings<T>,
 ): AutocompleteResult {
   /* eslint-disable unicorn/no-useless-undefined */
-  const [getDocument, setDocument] = singleton(settings.input.ownerDocument || window.document)
+  const [getDocument, setDocument] = singleton(settings.input.ownerDocument || globalThis.document)
   const [getItems, setItems] = singleton<T[]>([])
   const [getInputValue, setInputValue] = singleton('')
   const [getSelected, setSelected] = singleton<T | undefined>(undefined)
   const [getKeypressCounter, setKeypressCounter] = singleton(0)
-  const [getDebounceTimer, setDebounceTimer] = singleton<number | undefined>(undefined)
+  const [getDebounceTimer, setDebounceTimer] = singleton<NodeJS.Timeout | undefined>(undefined)
   /* eslint-enable */
 
   const {
@@ -87,7 +86,7 @@ export default function autocomplete<T extends AutocompleteItem>(
   function clearDebounceTimer() {
     const debounceTimer = getDebounceTimer()
     if (debounceTimer !== undefined) {
-      window.clearTimeout(debounceTimer)
+      globalThis.clearTimeout(debounceTimer)
       // eslint-disable-next-line unicorn/no-useless-undefined
       setDebounceTimer(undefined)
     }
@@ -97,7 +96,7 @@ export default function autocomplete<T extends AutocompleteItem>(
    * Attach the container to DOM
    */
   function attach() {
-    setDocument(input.ownerDocument || window.document)
+    setDocument(input.ownerDocument || globalThis.document)
     if (!container.parentNode) {
       getDocument().body.append(container)
     }
@@ -228,10 +227,10 @@ export default function autocomplete<T extends AutocompleteItem>(
   }
 
   function scrollEventHandler(event: Event) {
-    if (event.target !== container) {
-      updateIfDisplayed()
-    } else {
+    if (event.target === container) {
       event.preventDefault()
+    } else {
+      updateIfDisplayed()
     }
   }
 
@@ -248,7 +247,7 @@ export default function autocomplete<T extends AutocompleteItem>(
         update()
       }
     }
-    return window.setTimeout(() => {
+    return globalThis.setTimeout(() => {
       settings.fetch(value, handleFetchResult, trigger)
     }, debouncingTime)
   }
@@ -270,6 +269,7 @@ export default function autocomplete<T extends AutocompleteItem>(
   }
 
   function keyupEventHandler(event: KeyboardEvent) {
+    // eslint-disable-next-line sonarjs/deprecation
     const keyCode = event.which || event.keyCode || 0
 
     if (KEYS_TO_IGNORE.has(keyCode)) {
@@ -296,7 +296,7 @@ export default function autocomplete<T extends AutocompleteItem>(
       return
     }
     if (selected === undefined || selected === items[0]) {
-      setSelected(items[items.length - 1])
+      setSelected(items.at(-1))
       return
     }
     for (let index = items.length - 1; index > 0; index -= 1) {
@@ -318,7 +318,7 @@ export default function autocomplete<T extends AutocompleteItem>(
       setSelected(undefined)
       return
     }
-    if (selected === undefined || selected === items[items.length - 1]) {
+    if (selected === undefined || selected === items.at(-1)) {
       // eslint-disable-next-line prefer-destructuring
       setSelected(items[0])
       return
@@ -335,12 +335,14 @@ export default function autocomplete<T extends AutocompleteItem>(
     const containerIsDisplayed = containerDisplayed()
     if (containerIsDisplayed && getItems().length > 0) {
       switch (arrowKey) {
-        case Keys.Up:
+        case Keys.Up: {
           selectPreviousItem()
           break
-        case Keys.Down:
+        }
+        case Keys.Down: {
           selectNextItem()
           break
+        }
         default:
       }
       update()
@@ -366,6 +368,7 @@ export default function autocomplete<T extends AutocompleteItem>(
   }
 
   function keydownEventHandler(event: KeyboardEvent) {
+    // eslint-disable-next-line sonarjs/deprecation
     const keyCode = event.which || event.keyCode || 0
 
     if (
@@ -451,3 +454,5 @@ export default function autocomplete<T extends AutocompleteItem>(
     destroy,
   }
 }
+
+export { AutocompleteItem, AutocompleteSettings, EventTrigger } from './types'

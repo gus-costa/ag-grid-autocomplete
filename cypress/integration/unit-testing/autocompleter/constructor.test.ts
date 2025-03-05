@@ -11,8 +11,8 @@ describe('autocomplete unit testing constructor', () => {
         fetch() {},
         onSelect() {},
         strict: false,
-        input: window.document.body as HTMLInputElement,
-      })
+        input: globalThis.document.body as HTMLInputElement,
+      }),
     ).to.be.an('object')
   })
   it('should return an object with wanted properties', () => {
@@ -21,7 +21,7 @@ describe('autocomplete unit testing constructor', () => {
       fetch() {},
       onSelect() {},
       strict: false,
-      input: window.document.body as HTMLInputElement,
+      input: globalThis.document.body as HTMLInputElement,
     })
     expect(result).to.be.an('object')
     expect(result.destroy).to.be.a('function')

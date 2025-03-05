@@ -41,13 +41,15 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should have groups rendered
     cy.get('.autocomplete > div.group').should('exist')
@@ -102,13 +104,15 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should have groups rendered
     cy.get('.autocomplete > div.group').should('exist')
@@ -156,13 +160,15 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should contain both male and female groups
     cy.get('.autocomplete > div.group:first').contains('Female')
@@ -170,7 +176,8 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
     // First element which is not a group should be selected
     cy.get('.autocomplete > div:not(.group):first').should('have.class', 'selected').contains('Kelley Santana')
     // Should select element in the next group bypassing the group cell
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
     // Selected element should be from male group "Ken Boggart"
     cy.get('.autocomplete > div.selected').contains('Ken Boggart')
     cy.get('.ag-row-first > .ag-cell ').type('{enter}')

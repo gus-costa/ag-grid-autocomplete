@@ -1,10 +1,5 @@
-import {
-  AutocompleteSelectCellEditor,
-  DataFormat,
-  IAutocompleteSelectCellEditorParameters,
-} from 'ag-grid-autocomplete-editor'
+import { AutocompleteSelectCellEditor, DataFormat } from 'ag-grid-autocomplete-editor'
 import { ColDef, Grid } from 'ag-grid-community'
-import { StringIterator } from 'cypress/types/lodash'
 
 describe('ag-grid-autocomplete-editor end-to-end customization option tests', () => {
   it('should customize autocomplete items according to render function', function () {
@@ -52,23 +47,27 @@ describe('ag-grid-autocomplete-editor end-to-end customization option tests', ()
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should contain the customized rendered label
     cy.get('.autocomplete > div:nth-child(1)').contains('Kelley Santana_customized')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
-    cy.get('.ag-row-first > .ag-cell ').type('{del}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{del}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
   })
   it('should customize autocomplete items according to renderGroup function', function () {
@@ -117,13 +116,15 @@ describe('ag-grid-autocomplete-editor end-to-end customization option tests', ()
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should have groups rendered
     cy.get('.autocomplete > div.group').should('exist')

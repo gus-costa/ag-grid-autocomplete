@@ -162,7 +162,9 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this
       expect(indexQueryElement.val()).to.be.equal(selectData[0].label)
@@ -194,7 +196,10 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{downarrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this
       expect(indexQueryElement.val()).to.be.equal(selectData[1].label)
@@ -226,7 +231,9 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').trigger('keydown', {
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').trigger('keydown', {
       keyCode: 9,
       which: 9,
       shiftKey: false,
@@ -263,7 +270,10 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input and select the first element using arrow keys
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{downarrow}').trigger('keydown', {
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').trigger('keydown', {
       keyCode: 9,
       which: 9,
       shiftKey: false,
@@ -301,7 +311,11 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input then -> select element 1, select element 2, get back to element 1
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{downarrow}').type('{upArrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{upArrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this
@@ -334,7 +348,11 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input then -> select element 1, select element 2, cycle back to element 1
-    cy.get('#autocompleter').type(inputText).type('{downarrow}').type('{downarrow}').type('{downarrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{downarrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this
@@ -367,7 +385,9 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input then -> select element 1, select element 2, cycle back to element 1
-    cy.get('#autocompleter').type(inputText).type('{upArrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{upArrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this
@@ -400,7 +420,11 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input then -> select element 1, cycle back element 2, select element 1
-    cy.get('#autocompleter').type(inputText).type('{downArrow}').type('{upArrow}').type('{upArrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downArrow}')
+    cy.get('#autocompleter').type('{upArrow}')
+    cy.get('#autocompleter').type('{upArrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this
@@ -433,7 +457,11 @@ describe('autocomplete end-to-end selection tests', () => {
       })
     })
     // Type some text into the input then -> select element 1, cycle back element 2, select element 1
-    cy.get('#autocompleter').type(inputText).type('{downArrow}').type('{upArrow}').type('{upArrow}').type('{enter}')
+    cy.get('#autocompleter').type(inputText)
+    cy.get('#autocompleter').type('{downArrow}')
+    cy.get('#autocompleter').type('{upArrow}')
+    cy.get('#autocompleter').type('{upArrow}')
+    cy.get('#autocompleter').type('{enter}')
     // Should click on the first element on the list
     cy.get('#autocompleter').then((indexQueryElement) => {
       const { selectData } = this

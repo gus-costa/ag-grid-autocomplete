@@ -39,6 +39,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
@@ -85,12 +86,14 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').click().type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').click()
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // should have created the input text
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('exist')
     cy.get('*[placeholder="Select an option"]').should('exist')
@@ -133,12 +136,14 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').click().type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').click()
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // should have created the input text
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('exist')
     // input width should be the same as the defined column grid definition
@@ -185,12 +190,14 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').click().type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').click()
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // should have created the input text
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('exist')
     cy.get('*[placeholder="Select an option"]').should('exist')
@@ -237,12 +244,14 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').click().type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').click()
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // should have created the input text
     cy.get('[row-index="0"] > [aria-colindex="1"] > div > .ag-cell-editor-autocomplete-input').should('exist')
     cy.get('[row-index="0"] > [aria-colindex="1"] > div > [placeholder="Select an option"]').should('exist')
@@ -293,12 +302,15 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').click().type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').click()
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     // Should have created the autocomplete selection box
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should have two elements matching Ke coming from the data
@@ -342,12 +354,15 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').click().type('{enter}').type('(')
+    cy.get('.ag-row-first > .ag-cell ').click()
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('(')
     // Should have created the autocomplete selection box
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should have two elements matching Ke coming from the data
@@ -397,13 +412,15 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kelley Santana').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
     cy.get('.ag-row-first > .ag-cell ').type('{enter}')
@@ -449,16 +466,19 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid
@@ -501,13 +521,15 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kelley Santana').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
     cy.get('.ag-row-first > .ag-cell ').realPress('Tab')
@@ -560,16 +582,19 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('[row-index="0"] > [aria-colindex="1"]').contains('Kelley Santana').should('not.exist')
     // Start the edition
-    cy.get('[row-index="0"] > [aria-colindex="1"]').type('{enter}').type('Ke')
+    cy.get('[row-index="0"] > [aria-colindex="1"]').type('{enter}')
+    cy.get('[row-index="0"] > [aria-colindex="1"]').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-column-hover > .ag-wrapper > .ag-input-field-input').focus().realPress('Tab')
+    cy.get('.ag-column-hover > .ag-wrapper > .ag-input-field-input').focus()
+    cy.get('.ag-column-hover > .ag-wrapper > .ag-input-field-input').realPress('Tab')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid
@@ -631,6 +656,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
@@ -638,13 +664,15 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
     cy.get('[row-index="0"] > [aria-colindex="1"]').contains('Kenya Gallagher').should('not.exist')
     cy.get('[row-index="0"] > [aria-colindex="2"]').contains('Dana Nolan').should('not.exist')
     // Start the edition
-    cy.get('[row-index="0"] > [aria-colindex="1"]').type('{enter}').type('Ke')
+    cy.get('[row-index="0"] > [aria-colindex="1"]').type('{enter}')
+    cy.get('[row-index="0"] > [aria-colindex="1"]').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-column-hover > .ag-wrapper > .ag-input-field-input').focus().realPress('Tab')
+    cy.get('.ag-column-hover > .ag-wrapper > .ag-input-field-input').focus()
+    cy.get('.ag-column-hover > .ag-wrapper > .ag-input-field-input').realPress('Tab')
     // input should have been closed
     cy.get(
-      '[row-index="0"] > [aria-colindex="1"] > div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input'
+      '[row-index="0"] > [aria-colindex="1"] > div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input',
     ).should('not.exist')
     // Input should have been selected and sent to ag-grid
     cy.get('[row-index="0"] > [aria-colindex="1"]').contains('Kelley Santana').should('exist')
@@ -653,7 +681,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
     // The next input field should be focused
     cy.focused().should('have.class', 'ag-cell-editor-autocomplete-input')
     cy.get('[row-index="0"] > [aria-colindex="2"].ag-cell-inline-editing > .ag-wrapper > .ag-input-field-input').should(
-      'exist'
+      'exist',
     )
     // Should be able to type data into the next input
     cy.focused().type('Dana')
@@ -698,21 +726,25 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
-    cy.get('.ag-row-first > .ag-cell ').type('{del}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{del}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
   })
 })

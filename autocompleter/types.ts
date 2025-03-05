@@ -30,16 +30,11 @@ export interface AutocompleteSettings<T extends AutocompleteItem> {
   /**
    * Callback for additional autocomplete customization
    * @param {HTMLInputElement} input - input box associated with autocomplete
-   * @param {ClientRect | DOMRect} inputRect - size of the input box and its position relative to the viewport
+   * @param {DOMRect} inputRect - size of the input box and its position relative to the viewport
    * @param {HTMLDivElement} container - container with suggestions
    * @param {number} maxHeight - max height that can be used by autocomplete
    */
-  customize?: (
-    input: HTMLInputElement,
-    inputRect: ClientRect | DOMRect,
-    container: HTMLDivElement,
-    maxHeight: number
-  ) => void
+  customize?: (input: HTMLInputElement, inputRect: DOMRect, container: HTMLDivElement, maxHeight: number) => void
 }
 export interface AutocompleteResult {
   destroy: () => void

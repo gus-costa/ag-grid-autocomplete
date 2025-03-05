@@ -5,6 +5,7 @@ import { IAutocompleteSelectCellEditorParameters, DataFormat, IAutocompleterSett
 import autocomplete from './autocompleter/autocomplete'
 
 // use require instead of import to generate the .css file with webpack but avoid import into the .d.ts file
+// eslint-disable-next-line unicorn/prefer-module
 require('./ag-grid-autocomplete-editor.scss')
 
 const KEY_BACKSPACE = 8
@@ -30,7 +31,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   private stopEditing?: (cancel?: boolean) => void
 
   private static getSelectData(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>
+    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
   ): Array<DataFormat> {
     if (typeof parameters.selectData === 'function') {
       return parameters.selectData(parameters)
@@ -43,13 +44,13 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   }
 
   private static getDefaultAutocompleteSettings(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>
+    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
   ): Required<IAutocompleterSettings<DataFormat, AutocompleteSelectCellEditor>> {
     return {
       showOnFocus: false,
       render(cellEditor, item, value) {
         const itemElement = document.createElement('div')
-        const escapedValue = (value ?? '').replace(/[$()*+.?[\\\]^{|}]/g, '\\$&')
+        const escapedValue = (value ?? '').replaceAll(/[$()*+.?[\\\]^{|}]/g, String.raw`\$&`)
         const regex = new RegExp(escapedValue, 'gi')
         const fieldItem = document.createElement('span')
         fieldItem.innerHTML = item.label.replace(regex, function strongify(match: string) {
@@ -85,7 +86,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
         callback(
           items.filter(function caseInsensitiveIncludes(n) {
             return n.label.toLowerCase().includes(match)
-          })
+          }),
         )
       },
       debounceWaitMs: 200,
@@ -102,6 +103,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   }
 
   private static suppressKeyboardEvent(parameters: SuppressKeyboardEventParams): boolean {
+    // eslint-disable-next-line sonarjs/deprecation
     const { keyCode } = parameters.event
     return parameters.editing && KeysHandled.has(keyCode)
   }
@@ -119,7 +121,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
 
   constructor() {
     super(
-      '<div class="ag-wrapper ag-input-wrapper ag-text-field-input-wrapper ag-cell-editor-autocomplete-wrapper" style="padding: 0 !important;"><input class="ag-input-field-input ag-text-field-input ag-cell-editor-autocomplete-input" type="text"/></div>'
+      '<div class="ag-wrapper ag-input-wrapper ag-text-field-input-wrapper ag-cell-editor-autocomplete-wrapper" style="padding: 0 !important;"><input class="ag-input-field-input ag-text-field-input ag-cell-editor-autocomplete-input" type="text"/></div>',
     )
     this.eInput = this.getGui().querySelector('input') as HTMLInputElement
     if (this.currentItem) {
@@ -168,12 +170,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
         return autocompleteParameters.fetch(this, text, update, trigger)
       },
       debounceWaitMs: autocompleteParameters.debounceWaitMs,
-      customize: (
-        input: HTMLInputElement,
-        inputRect: ClientRect | DOMRect,
-        container: HTMLDivElement,
-        maxHeight: number
-      ) => {
+      customize: (input: HTMLInputElement, inputRect: DOMRect, container: HTMLDivElement, maxHeight: number) => {
         return autocompleteParameters.customize(this, input, inputRect, container, maxHeight)
       },
     })
@@ -187,6 +184,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   }
 
   handleTabEvent(event: KeyboardEvent) {
+    // eslint-disable-next-line sonarjs/deprecation
     const keyCode = event.which || event.keyCode || 0
     if (keyCode === KEY_TAB && this.gridOptionsWrapper) {
       if (event.shiftKey) {

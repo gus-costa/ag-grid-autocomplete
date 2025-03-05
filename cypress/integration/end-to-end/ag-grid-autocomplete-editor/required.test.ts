@@ -40,21 +40,25 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
-    cy.get('.ag-row-first > .ag-cell ').type('{del}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{del}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
   })
   it('should keep last valid value if new value does not match any item', function () {
@@ -95,21 +99,26 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
-    cy.get('.ag-row-first > .ag-cell ').type('{del}').type('not a valid name').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{del}')
+    cy.get('.ag-row-first > .ag-cell ').type('not a valid name')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
   })
   it('should keep last valid value if isCancelBeforeEnd called', function () {
@@ -150,16 +159,19 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
         suppressScrollOnNewData: false,
         suppressBrowserResizeObserver: true,
       }
+      // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
     // Start the edition
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}').type('Ke')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('Ke')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should select the first element and hit enter it to select
-    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}').type('{enter}')
+    cy.get('.ag-row-first > .ag-cell ').type('{downArrow}')
+    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     // input should have been closed
     cy.get('div.ag-cell-editor-autocomplete-wrapper > .ag-cell-editor-autocomplete-input').should('not.exist')
     // Input should have been selected and sent to ag-grid

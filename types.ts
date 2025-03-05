@@ -25,9 +25,9 @@ export interface IAutocompleterSettings<T extends AutocompleteItem, U extends Po
   customize?: (
     cellEditor: U,
     input: HTMLInputElement,
-    inputRect: ClientRect | DOMRect,
+    inputRect: DOMRect,
     container: HTMLDivElement,
-    maxHeight: number
+    maxHeight: number,
   ) => void
 }
 
