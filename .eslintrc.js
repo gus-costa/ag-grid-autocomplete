@@ -19,6 +19,8 @@ const CYPRESS_TS_OVERRIDE = {
     'func-names': 'off',
     '@typescript-eslint/no-unused-expressions': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'import/no-extraneous-dependencies': 'off',
+    'unicorn/prevent-abbreviations': ['error', { allowList: { ColDef: true } }],
   },
 }
 

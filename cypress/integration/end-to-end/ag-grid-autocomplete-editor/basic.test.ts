@@ -1,11 +1,11 @@
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
-import { ColDef, Grid } from 'ag-grid-community'
+import { ColDef, Grid } from '../../../utils/ag-grid'
 
 describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should create an ag-grid with some AutocompleteSelectCellEditor without crash', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -52,7 +52,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should create and enter edit mode with AutocompleteSelectCellEditor when cell clicked then Enter pressed', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -101,7 +101,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should create input taking the entire space of the column', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -156,7 +156,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should close opened input when Enter hit', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -210,7 +210,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should close opened input when Tab hit and open it into next row', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -268,7 +268,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should show selection list when some text is typed in search', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -319,7 +319,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should show selection list with regexIsh data', function () {
     cy.fixture('selectDatas/regexish.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -378,7 +378,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should select autocomplete the data and put it into ag-grid when Enter hit 1st', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -432,7 +432,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should select autocomplete the data and put it into ag-grid when Enter hit 2nd', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -487,7 +487,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should select autocomplete the data and put it into ag-grid and go to next row when Tab hit', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -543,7 +543,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should select autocomplete the data and put it into ag-grid and go the the next column in edit mode when Tab hit', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined, 'second-column': undefined },
@@ -605,7 +605,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should select autocomplete the data and put it into ag-grid and go the the next column in edit mode when Tab hit and focus the input field', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined, 'second-column': undefined },
@@ -692,7 +692,7 @@ describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
   it('should remove actual value by starting edit with delete', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },

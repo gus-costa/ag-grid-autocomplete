@@ -121,8 +121,12 @@ typings/
 .vscode/
 .dccache
 cypress/videos/
+cypress/screenshots/
 dist/
 *.d.ts
 *.js
 *.map.js
 *.css
+
+deps-cache/
+temp/

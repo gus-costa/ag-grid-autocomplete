@@ -1,11 +1,11 @@
 import { AutocompleteSelectCellEditor, DataFormat } from 'ag-grid-autocomplete-editor'
-import { ColDef, Grid } from 'ag-grid-community'
+import { ColDef, Grid } from '../../../utils/ag-grid'
 
 describe('ag-grid-autocomplete-editor end-to-end customization option tests', () => {
   it('should customize autocomplete items according to render function', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -72,7 +72,7 @@ describe('ag-grid-autocomplete-editor end-to-end customization option tests', ()
   })
   it('should customize autocomplete items according to renderGroup function', function () {
     cy.fixture('selectDatas/groups.json').as('selectDatas')
-    cy.visit('./cypress/static/ag-grid-autocomplete-editor-test-sandbox.html')
+    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
