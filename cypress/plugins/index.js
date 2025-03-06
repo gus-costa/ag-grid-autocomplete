@@ -31,8 +31,12 @@ module.exports = (on, config) => {
   })
 
   config.env.SANDBOX_HTML_FILE = DEFAULT_SANDBOX_FILE;
+  const packageJson = require('../../node_modules/ag-grid-community/package.json');
+  config.env.AG_GRID_VERSION = Number.parseInt(packageJson.version.split('.')[0])
 
   if (process.env.AG_GRID_VERSION) {
+    config.env.AG_GRID_VERSION = Number.parseInt(process.env.AG_GRID_VERSION)
+
     const packageFolder = `deps-cache/node_modules/ag-grid-community-${process.env.AG_GRID_VERSION}`;
     const sandboxFile = `./cypress/static/temp/ag-grid-autocomplete-editor-test-sandbox-${process.env.AG_GRID_VERSION}.html`;
 
@@ -62,8 +66,8 @@ function createStaticTempDir(versionDir) {
 
 function writeImportFile(version) {
   const importStatements = version ?
-    `export { ColDef, Grid } from '../../deps-cache/node_modules/ag-grid-community-${version}'\n` :
-    `export { ColDef, Grid } from 'ag-grid-community'\n`;
+    `export { ColDef, Grid, GridOptions } from '../../deps-cache/node_modules/ag-grid-community-${version}'\n` :
+    `export { ColDef, Grid, GridOptions } from 'ag-grid-community'\n`;
 
   writeFileSync(path.resolve(PROJECT_ROOT, './cypress/utils/ag-grid.ts'), importStatements);
 }

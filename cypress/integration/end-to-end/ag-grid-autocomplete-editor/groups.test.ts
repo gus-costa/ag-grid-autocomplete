@@ -1,5 +1,16 @@
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
-import { ColDef, Grid } from '../../../utils/ag-grid'
+import { ColDef, Grid, GridOptions } from '../../../utils/ag-grid'
+import getOptions from '../../../utils/get-options'
+
+function getGridOptions(columnDefs: ColDef[], rowDatas: any[]): GridOptions {
+  return {
+    columnDefs,
+    rowData: rowDatas,
+    suppressScrollOnNewData: false,
+    suppressBrowserResizeObserver: true,
+    ...getOptions<GridOptions>(Cypress.env('AG_GRID_VERSION'), 'gridOptions'),
+  }
+}
 
 describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
   it('should render groups when the data is present', function () {
@@ -34,12 +45,7 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = {
-        columnDefs,
-        rowData: rowDatas,
-        suppressScrollOnNewData: false,
-        suppressBrowserResizeObserver: true,
-      }
+      const gridOptions = getGridOptions(columnDefs, rowDatas)
       // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
@@ -97,12 +103,7 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = {
-        columnDefs,
-        rowData: rowDatas,
-        suppressScrollOnNewData: false,
-        suppressBrowserResizeObserver: true,
-      }
+      const gridOptions = getGridOptions(columnDefs, rowDatas)
       // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })
@@ -153,12 +154,7 @@ describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = {
-        columnDefs,
-        rowData: rowDatas,
-        suppressScrollOnNewData: false,
-        suppressBrowserResizeObserver: true,
-      }
+      const gridOptions = getGridOptions(columnDefs, rowDatas)
       // eslint-disable-next-line sonarjs/constructor-for-side-effects
       new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
     })

@@ -1,1 +1,1 @@
-export { ColDef, Grid } from 'ag-grid-community'
+export { ColDef, Grid, GridOptions } from 'ag-grid-community'
