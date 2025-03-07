@@ -17,6 +17,10 @@ export default function getOptions<T extends Record<string, any>>(version: numbe
       26: {
         columnHoverHighlight: true,
       },
+      28: {
+        columnHoverHighlight: true,
+        enableCellEditingOnBackspace: true,
+      },
     },
 
     // Example

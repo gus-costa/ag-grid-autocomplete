@@ -1,5 +1,4 @@
 import { ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from '@ag-grid-community/core'
-
 import { IAutocompleteSelectCellEditorParameters, DataFormat, IAutocompleterSettings } from './types'
 
 import autocomplete from './autocompleter/autocomplete'
@@ -18,8 +17,20 @@ const KEY_DOWN = 40
 // New key string constants for eventKey
 const KEY_BACKSPACE_STRING = 'Backspace'
 const KEY_DELETE_STRING = 'Delete'
+const KEY_ENTER_STRING = 'Enter'
+const KEY_TAB_STRING = 'Tab'
+const KEY_UP_STRING = 'ArrowUp'
+const KEY_DOWN_STRING = 'ArrowDown'
 
 const KeysHandled = new Set([KEY_BACKSPACE, KEY_DELETE, KEY_ENTER, KEY_TAB, KEY_UP, KEY_DOWN])
+const KeysHandledStrings = new Set([
+  KEY_BACKSPACE_STRING,
+  KEY_DELETE_STRING,
+  KEY_ENTER_STRING,
+  KEY_TAB_STRING,
+  KEY_UP_STRING,
+  KEY_DOWN_STRING,
+])
 
 export default class AutocompleteSelectCellEditor extends PopupComponent implements ICellEditorComp {
   public currentItem?: DataFormat
@@ -33,6 +44,10 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   private required: boolean = false
 
   private stopEditing?: (cancel?: boolean) => void
+
+  private backspaceTriggersEdit = true
+
+  private isVersionGte28 = false
 
   private static getSelectData(
     parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
@@ -106,10 +121,44 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     }
   }
 
-  private static suppressKeyboardEvent(parameters: SuppressKeyboardEventParams): boolean {
+  /**
+   * Determines whether a keyboard event should be suppressed in a grid cell.
+   * Supports both modern (key-based) and legacy (keyCode-based) keyboard event handling.
+   *
+   * @param parameters - Event parameters from ag-grid
+   * @param isRequired - Whether the cell represents a required field
+   * @param backspaceTriggersEdit - Whether pressing backspace should trigger cell editing
+   * @param isVersionGte28 - Whether using ag-grid version 28 or greater (which changed edit behavior)
+   * @returns True if the event should be suppressed, false otherwise
+   */
+  private static suppressKeyboardEvent(
+    parameters: SuppressKeyboardEventParams,
+    isRequired = false,
+    backspaceTriggersEdit = true,
+    isVersionGte28 = false,
+  ): boolean {
+    // Check for both keyCode (deprecated) and key (new string-based approach)
     // eslint-disable-next-line sonarjs/deprecation
     const { keyCode } = parameters.event
-    return parameters.editing && KeysHandled.has(keyCode)
+    const { key } = parameters.event
+
+    // Handle both numeric keyCode and string key approaches
+    if (parameters.editing && (key ? KeysHandledStrings.has(key) : KeysHandled.has(keyCode))) {
+      return true
+    }
+
+    // Logic below this point is required only if we are using ag-grid>=28, field is required, and is not in edit mode
+    if (!isVersionGte28 || !isRequired || parameters.editing) {
+      return false
+    }
+
+    // If the user hits delete, prevent it as it doesn't trigger a cell edit anymore
+    if (key ? key === KEY_DELETE_STRING : keyCode === KEY_DELETE) {
+      return true
+    }
+
+    // If the user hits backspace and cell editing is not enabled, prevent it
+    return !backspaceTriggersEdit && (key ? key === KEY_BACKSPACE_STRING : keyCode === KEY_BACKSPACE)
   }
 
   private static getStartValue(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>) {
@@ -193,7 +242,20 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     }
     if (!parameters.colDef.suppressKeyboardEvent) {
       // eslint-disable-next-line no-param-reassign
-      parameters.colDef.suppressKeyboardEvent = AutocompleteSelectCellEditor.suppressKeyboardEvent
+      parameters.colDef.suppressKeyboardEvent = (suppressParameters) =>
+        AutocompleteSelectCellEditor.suppressKeyboardEvent(
+          suppressParameters,
+          this.required,
+          this.backspaceTriggersEdit,
+          this.isVersionGte28,
+        )
+    }
+
+    // The behavior for deleting call values changed from v28 and beyond, so we need to track this option's value
+    if (typeof this.gridOptionsWrapper.isEnableCellEditingOnBackspace === 'function') {
+      // isEnableCellEditingOnBackspace is new on version 28
+      this.isVersionGte28 = true
+      this.backspaceTriggersEdit = this.gridOptionsWrapper.isEnableCellEditingOnBackspace()
     }
   }
 

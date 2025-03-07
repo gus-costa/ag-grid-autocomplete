@@ -73,7 +73,10 @@ describe('ag-grid-autocomplete-editor end-to-end customization option tests', ()
     // Input should have been selected and sent to ag-grid
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
     cy.get('.ag-row-first > .ag-cell ').type('{del}')
-    cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    // From ag-grid v28 and onwards hitting the delete key won't trigger cell edit
+    if (Cypress.env('AG_GRID_VERSION') < 28) {
+      cy.get('.ag-row-first > .ag-cell ').type('{enter}')
+    }
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
   })
   it('should customize autocomplete items according to renderGroup function', function () {
