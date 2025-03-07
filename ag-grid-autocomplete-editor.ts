@@ -15,6 +15,10 @@ const KEY_TAB = 9
 const KEY_UP = 38
 const KEY_DOWN = 40
 
+// New key string constants for eventKey
+const KEY_BACKSPACE_STRING = 'Backspace'
+const KEY_DELETE_STRING = 'Delete'
+
 const KeysHandled = new Set([KEY_BACKSPACE, KEY_DELETE, KEY_ENTER, KEY_TAB, KEY_UP, KEY_DOWN])
 
 export default class AutocompleteSelectCellEditor extends PopupComponent implements ICellEditorComp {
@@ -109,7 +113,17 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   }
 
   private static getStartValue(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>) {
-    const keyPressBackspaceOrDelete = parameters.keyPress === KEY_BACKSPACE || parameters.keyPress === KEY_DELETE
+    // Check for new eventKey (v27+) or fall back to keyPress for backward compatibility
+    // Use type assertion with 'as any' to access potentially undefined properties
+    // without modifying the interface definition
+    const eventKey = (parameters as any).eventKey as string
+    const keyPress = (parameters as any).keyPress as number
+
+    // Check for backspace or delete using either the string eventKey or numeric keyPress
+    const isBackspace = eventKey ? eventKey === KEY_BACKSPACE_STRING : keyPress === KEY_BACKSPACE
+    const isDelete = eventKey ? eventKey === KEY_DELETE_STRING : keyPress === KEY_DELETE
+    const keyPressBackspaceOrDelete = isBackspace || isDelete
+
     if (keyPressBackspaceOrDelete) {
       return ''
     }
