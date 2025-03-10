@@ -35,19 +35,10 @@ module.exports = (on, config) => {
   config.env.AG_GRID_VERSION = Number.parseInt(packageJson.version.split('.')[0])
 
   if (process.env.AG_GRID_VERSION) {
-    config.env.AG_GRID_VERSION = Number.parseInt(process.env.AG_GRID_VERSION)
+    const version = Number.parseInt(process.env.AG_GRID_VERSION)
+    config.env.AG_GRID_VERSION = version
 
-    const packageFolder = `deps-cache/node_modules/ag-grid-community-${process.env.AG_GRID_VERSION}`;
-    const sandboxFile = `./cypress/static/temp/ag-grid-autocomplete-editor-test-sandbox-${process.env.AG_GRID_VERSION}.html`;
-
-    createStaticTempDir(path.resolve(PROJECT_ROOT, './cypress/static/temp'));
-
-    const template = readFileSync(path.resolve(PROJECT_ROOT, DEFAULT_SANDBOX_FILE), { encoding: 'utf-8' });
-    const newFile = template
-      .replaceAll('node_modules/ag-grid-community', packageFolder)
-      .replaceAll('base href="../../"', 'base href="../../../"');
-
-    writeFileSync(path.resolve(PROJECT_ROOT, sandboxFile), newFile);
+    const sandboxFile = writeSandboxFile(version);
 
     config.env.SANDBOX_HTML_FILE = sandboxFile;
   }
@@ -55,6 +46,25 @@ module.exports = (on, config) => {
   writeImportFile(process.env.AG_GRID_VERSION);
 
   return config
+}
+
+function writeSandboxFile(version) {
+  const packageFolder = `deps-cache/node_modules/ag-grid-community-${version}`;
+  const sandboxFile = `./cypress/static/temp/ag-grid-autocomplete-editor-test-sandbox-${version}.html`;
+
+  createStaticTempDir(path.resolve(PROJECT_ROOT, './cypress/static/temp'));
+
+  const template = readFileSync(path.resolve(PROJECT_ROOT, DEFAULT_SANDBOX_FILE), { encoding: 'utf-8' });
+  let newFile = template
+    .replaceAll('node_modules/ag-grid-community', packageFolder)
+    .replaceAll('base href="../../"', 'base href="../../../"');
+
+  if (version < 29) {
+    newFile = newFile.replaceAll('styles/', 'dist/styles/')
+  }
+
+  writeFileSync(path.resolve(PROJECT_ROOT, sandboxFile), newFile);
+  return sandboxFile;
 }
 
 function createStaticTempDir(versionDir) {

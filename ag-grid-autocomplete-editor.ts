@@ -1,5 +1,7 @@
-import { ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from '@ag-grid-community/core'
+import { GridApi, ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from '@ag-grid-community/core'
 import { IAutocompleteSelectCellEditorParameters, DataFormat, IAutocompleterSettings } from './types'
+import createGridOptionsAdapter from './src/adapters/grid-options-adapter'
+import { IGridOptionsAdapter } from './src/adapters/grid-options-interfaces'
 
 import autocomplete from './autocompleter/autocomplete'
 
@@ -31,7 +33,6 @@ const KeysHandledStrings = new Set([
   KEY_UP_STRING,
   KEY_DOWN_STRING,
 ])
-
 export default class AutocompleteSelectCellEditor extends PopupComponent implements ICellEditorComp {
   public currentItem?: DataFormat
 
@@ -45,9 +46,14 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
 
   private stopEditing?: (cancel?: boolean) => void
 
+  /**
+   * Originally AgGrid would always trigger cell editing when backspace was hit
+   */
   private backspaceTriggersEdit = true
 
-  private isVersionGte28 = false
+  private gridApi?: GridApi
+
+  private gridOptionsAdapter!: IGridOptionsAdapter
 
   private static getSelectData(
     parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
@@ -193,6 +199,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   }
 
   public init(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>) {
+    this.gridApi = parameters.api
     this.stopEditing = parameters.stopEditing
     const defaultSettings = AutocompleteSelectCellEditor.getDefaultAutocompleteSettings(parameters)
     this.focusAfterAttached = parameters.cellStartedEdit
@@ -237,9 +244,14 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
         return autocompleteParameters.customize(this, input, inputRect, container, maxHeight)
       },
     })
+
     if (parameters.required) {
       this.required = true
     }
+
+    // Create the grid options adapter based on the instance
+    this.gridOptionsAdapter = createGridOptionsAdapter(this)
+
     if (!parameters.colDef.suppressKeyboardEvent) {
       // eslint-disable-next-line no-param-reassign
       parameters.colDef.suppressKeyboardEvent = (suppressParameters) =>
@@ -247,26 +259,25 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
           suppressParameters,
           this.required,
           this.backspaceTriggersEdit,
-          this.isVersionGte28,
+          this.gridOptionsAdapter.version >= 28,
         )
     }
 
-    // The behavior for deleting call values changed from v28 and beyond, so we need to track this option's value
-    if (typeof this.gridOptionsWrapper.isEnableCellEditingOnBackspace === 'function') {
-      // isEnableCellEditingOnBackspace is new on version 28
-      this.isVersionGte28 = true
-      this.backspaceTriggersEdit = this.gridOptionsWrapper.isEnableCellEditingOnBackspace()
+    // The behavior for deleting cell values changed from v28 and beyond, so we need to track this option's value
+    if (this.gridOptionsAdapter.version >= 28) {
+      this.backspaceTriggersEdit = this.gridOptionsAdapter.isEnableCellEditingOnBackspace()
     }
   }
 
   handleTabEvent(event: KeyboardEvent) {
     // eslint-disable-next-line sonarjs/deprecation
     const keyCode = event.which || event.keyCode || 0
-    if (keyCode === KEY_TAB && this.gridOptionsWrapper) {
+
+    if (keyCode === KEY_TAB && this.gridApi) {
       if (event.shiftKey) {
-        this.gridOptionsWrapper.getApi()!.tabToPreviousCell()
+        this.gridApi.tabToPreviousCell()
       } else {
-        this.gridOptionsWrapper.getApi()!.tabToNextCell()
+        this.gridApi.tabToNextCell()
       }
     } else {
       this.destroy()
