@@ -182,8 +182,9 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     if (keyPressBackspaceOrDelete) {
       return ''
     }
-    if (parameters.charPress) {
-      return parameters.charPress
+    // Detecting if the pressed key is a character
+    if (parameters.eventKey?.length === 1) {
+      return parameters.eventKey
     }
     return parameters.formatValue(parameters.value)
   }
