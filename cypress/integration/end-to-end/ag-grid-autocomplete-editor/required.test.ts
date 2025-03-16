@@ -1,16 +1,6 @@
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
-import { ColDef, Grid, GridOptions } from '../../../utils/ag-grid'
-import getOptions from '../../../utils/get-options'
-
-function getGridOptions(columnDefs: ColDef[], rowDatas: any[]): GridOptions {
-  return {
-    columnDefs,
-    rowData: rowDatas,
-    suppressScrollOnNewData: false,
-    suppressBrowserResizeObserver: true,
-    ...getOptions<GridOptions>(Cypress.env('AG_GRID_VERSION'), 'gridOptions'),
-  }
-}
+import createGrid from 'utils/create-grid'
+import { ColDef } from '../../../utils/ag-grid'
 
 describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
   it('should not remove actual value by starting edit with delete', function () {
@@ -45,9 +35,7 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = getGridOptions(columnDefs, rowDatas)
-      // eslint-disable-next-line sonarjs/constructor-for-side-effects
-      new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -102,9 +90,7 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = getGridOptions(columnDefs, rowDatas)
-      // eslint-disable-next-line sonarjs/constructor-for-side-effects
-      new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -156,9 +142,7 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = getGridOptions(columnDefs, rowDatas)
-      // eslint-disable-next-line sonarjs/constructor-for-side-effects
-      new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -211,9 +195,7 @@ describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      const gridOptions = getGridOptions(columnDefs, rowDatas)
-      // eslint-disable-next-line sonarjs/constructor-for-side-effects
-      new Grid(<HTMLElement>indexQueryElement.get(0), gridOptions)
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
