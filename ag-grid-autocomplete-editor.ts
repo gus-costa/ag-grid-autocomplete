@@ -82,11 +82,17 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
           return `<strong>${match}</strong>`
         })
         itemElement.append(fieldItem)
-        cellEditor.addManagedListener(itemElement, 'mousedown', (event: MouseEvent) => {
+        const eventFunction = (event: MouseEvent) => {
           // eslint-disable-next-line no-param-reassign
           cellEditor.currentItem = item
           event.stopPropagation()
-        })
+        }
+        if ('addManagedListeners' in cellEditor) {
+          // ag-grid v32+
+          ;(cellEditor as any).addManagedListeners(itemElement, { mousedown: eventFunction })
+        } else {
+          ;(cellEditor as any).addManagedListener(itemElement, 'mousedown', eventFunction)
+        }
         return itemElement
       },
       renderGroup(_, name) {

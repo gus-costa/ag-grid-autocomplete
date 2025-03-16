@@ -66,7 +66,7 @@
     "select"
   ],
   "peerDependencies": {
-    "@ag-grid-community/core": ">= 23 < 32"
+    "@ag-grid-community/core": ">= 23 < 33"
   },
   "devDependencies": {
     "@commitlint/cli": "12.1.1",
@@ -81,7 +81,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "ag-grid-autocomplete-editor": "file:./",
-    "ag-grid-community": "^31.3.4",
+    "ag-grid-community": "^32.3.4",
     "autoprefixer": "10.2.5",
     "css-loader": "5.2.2",
     "cypress": "^14.2.0",
