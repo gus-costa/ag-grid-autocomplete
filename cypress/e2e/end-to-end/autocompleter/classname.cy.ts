@@ -1,4 +1,4 @@
-import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete end-to-end className tests', () => {
   it('should show select with the added className passed as parameter', function () {

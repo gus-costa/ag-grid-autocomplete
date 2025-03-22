@@ -1,4 +1,4 @@
-import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete end-to-end autoselect tests', () => {
   it('should not autoselect first when outside click is detected', function () {

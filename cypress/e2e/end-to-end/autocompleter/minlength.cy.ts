@@ -1,4 +1,4 @@
-import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete end-to-end minlength tests', () => {
   it('should not show select list until minLength is greater than equal input length', function () {

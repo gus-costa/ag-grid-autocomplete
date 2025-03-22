@@ -1,8 +1,8 @@
-import { AutocompleteSelectCellEditor, DataFormat } from 'ag-grid-autocomplete-editor'
+import { AutocompleteSelectCellEditor, DataFormat } from 'ag-grid-autocomplete'
 import createGrid from 'utils/create-grid'
 import { ColDef } from '../../../utils/ag-grid'
 
-describe('ag-grid-autocomplete-editor end-to-end customization option tests', () => {
+describe('ag-grid-autocomplete end-to-end customization option tests', () => {
   it('should customize autocomplete items according to render function', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore

@@ -1,8 +1,8 @@
-import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
+import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
 import createGrid from 'utils/create-grid'
 import { ColDef } from '../../../utils/ag-grid'
 
-describe('ag-grid-autocomplete-editor end-to-end groups option tests', () => {
+describe('ag-grid-autocomplete end-to-end groups option tests', () => {
   it('should render groups when the data is present', function () {
     cy.fixture('selectDatas/groups.json').as('selectDatas')
     // @ts-ignore

@@ -1,7 +1,4 @@
-import autocomplete, {
-  AutocompleteItem,
-  AutocompleteSettings,
-} from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete, { AutocompleteItem, AutocompleteSettings } from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete end-to-end strict tests', () => {
   it('should call onSelect with undefined when strict is true and no elements from fetch', function () {

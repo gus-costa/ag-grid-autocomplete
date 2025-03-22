@@ -1,4 +1,4 @@
-import autocomplete from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete end-to-end basic tests', () => {
   it('should show select options when text typed', function () {

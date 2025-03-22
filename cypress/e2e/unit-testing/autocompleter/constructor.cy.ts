@@ -1,4 +1,4 @@
-import autocomplete from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete unit testing constructor', () => {
   it('should be a function', () => {

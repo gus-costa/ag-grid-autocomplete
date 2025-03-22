@@ -1,8 +1,8 @@
-import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
+import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
 import createGrid from 'utils/create-grid'
 import { ColDef } from '../../../utils/ag-grid'
 
-describe('ag-grid-autocomplete-editor end-to-end basic tests', () => {
+describe('ag-grid-autocomplete end-to-end basic tests', () => {
   it('should create an ag-grid with some AutocompleteSelectCellEditor without crash', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore

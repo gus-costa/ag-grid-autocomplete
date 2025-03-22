@@ -1,4 +1,4 @@
-import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete-editor/autocompleter/autocomplete'
+import autocomplete, { AutocompleteItem } from 'ag-grid-autocomplete/autocompleter/autocomplete'
 
 describe('autocomplete end-to-end showonfocus tests', () => {
   it('should show select list on focus', function () {

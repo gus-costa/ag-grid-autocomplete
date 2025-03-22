@@ -1,8 +1,8 @@
-import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
+import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
 import createGrid from 'utils/create-grid'
 import { ColDef } from '../../../utils/ag-grid'
 
-describe('ag-grid-autocomplete-editor end-to-end required option tests', () => {
+describe('ag-grid-autocomplete end-to-end required option tests', () => {
   it('should not remove actual value by starting edit with delete', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
     // @ts-ignore

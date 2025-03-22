@@ -7,7 +7,7 @@ import autocomplete from './autocompleter/autocomplete'
 
 // use require instead of import to generate the .css file with webpack but avoid import into the .d.ts file
 // eslint-disable-next-line unicorn/prefer-module
-require('./ag-grid-autocomplete-editor.scss')
+require('./ag-grid-autocomplete.scss')
 
 const KEY_BACKSPACE = 8
 const KEY_DELETE = 46
