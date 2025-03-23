@@ -29,7 +29,8 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "husky"
   },
   "author": "Gus Costa",
   "license": "MIT",
@@ -57,15 +58,10 @@
     "@ag-grid-community/core": ">= 23 < 33"
   },
   "devDependencies": {
-    "@commitlint/cli": "12.1.1",
-    "@commitlint/config-conventional": "12.1.1",
-    "@semantic-release/changelog": "5.0.1",
-    "@semantic-release/commit-analyzer": "github:semantic-release/commit-analyzer#v8.0.1",
-    "@semantic-release/git": "github:semantic-release/git#v9.0.1",
-    "@semantic-release/github": "github:semantic-release/github#v7.2.3",
-    "@semantic-release/release-notes-generator": "github:semantic-release/release-notes-generator#v9.0.3",
-    "@types/chai": "^4.2.16",
-    "@types/node": "^18.19.76",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@types/chai": "^5.2.0",
+    "@types/node": "^20.17.24",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "ag-grid-autocomplete": "file:./",
@@ -83,16 +79,16 @@
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-sonarjs": "^3.0.2",
     "eslint-plugin-unicorn": "^56.0.1",
-    "husky": "4.3.8",
-    "lint-staged": "10.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "mini-css-extract-plugin": "1.5.0",
     "postcss": "^8.5.2",
     "postcss-loader": "8.1.1",
     "postcss-scss": "4.0.9",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.3",
     "sass": "1.32.10",
     "sass-loader": "11.0.1",
-    "semantic-release": "17.4.2",
+    "semantic-release": "^24.2.3",
     "ts-loader": "9.5.2",
     "typescript": "^4.7.4",
     "webpack": "5.98.0",
@@ -102,13 +98,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run test"
-    }
   },
   "lint-staged": {
     "*": [
@@ -120,14 +109,7 @@
   },
   "release": {
     "branches": [
-      "master"
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/github"
+      "main"
     ]
   },
   "types": "types/index.d.ts"

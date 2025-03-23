@@ -1,8 +1,0 @@
-extraction:
-  javascript:
-    index:
-      exclude:
-        - tests
-      include:
-        - autocompleter
-        - ag-grid-autocomplete-editor.ts

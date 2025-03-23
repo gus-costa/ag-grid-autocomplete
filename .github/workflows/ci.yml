@@ -1,20 +1,20 @@
-name: CI
+name: Test PRs
 
 on:
   pull_request_target:
     types: [labeled]
 jobs:
-  build:
-    name: Build
+  test:
+    name: Test
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'safe to test')
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 15
+          node-version: 20
       - name: Install dependencies
         run: |
           npm ci
