@@ -7,7 +7,9 @@
 
 A powerful autocomplete cell editor for [ag-Grid](https://github.com/ag-grid/ag-grid) that enhances data selection with typeahead functionality, grouping capabilities, and flexible data retrieval.
 
-> **Note:** This package is a direct, drop-in replacement for `ag-grid-autocomplete-editor` with enhanced compatibility for AG Grid v23-v32 (v33 support coming soon!). All imports, APIs, and configurations work exactly the same - just update your package name!
+> **Note:** This package is a direct, drop-in replacement for `ag-grid-autocomplete-editor` with enhanced compatibility for AG Grid v23-v33. All imports, APIs, and configurations work exactly the same - just update your package name!
+>
+> **Migrating to v33+:** If you're using the modular `@ag-grid-community/*` packages, you'll need to migrate to `ag-grid-community` to use AG Grid v33 and beyond. See the [official migration guide](https://ag-grid.com/javascript-data-grid/upgrading-to-ag-grid-33/) for details. If you prefer to keep using the modular packages, stay on AG Grid v32 or lower and use v1 of this library.
 
 ## Why ag-grid-autocomplete?
 
@@ -17,7 +19,7 @@ Data grids often struggle with selection interfaces for large datasets. Traditio
 - Support for grouped options with visual hierarchy
 - Local and remote data source flexibility
 - Keyboard navigation and accessibility features
-- Full compatibility with all AG Grid versions from v23 to v32
+- Full compatibility with all AG Grid versions from v23 to v33
 
 ## Installation
 
@@ -36,12 +38,12 @@ Then update your imports:
 
 ```js
 // Old import
-import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor';
-import 'ag-grid-autocomplete-editor/dist/main.css';
+import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor'
+import 'ag-grid-autocomplete-editor/dist/main.css'
 
 // New import
-import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete';
-import 'ag-grid-autocomplete/dist/main.css';
+import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
+import 'ag-grid-autocomplete/dist/main.css'
 ```
 
 ## Key Features
@@ -50,7 +52,7 @@ import 'ag-grid-autocomplete/dist/main.css';
 - **Remote Data** - Fetch options from APIs with built-in debouncing
 - **Grouped Options** - Organize related choices with intuitive grouping
 - **Free Text Support** - Allow users to enter custom values when needed
-- **Broad Compatibility** - Works with AG Grid v23 through v32
+- **Broad Compatibility** - Works with AG Grid v23 through v33
 
 ## Usage Examples
 
@@ -97,10 +99,10 @@ import 'ag-grid-autocomplete/dist/main.css';
                fetch(`https://restcountries.com/v3.1/name/${match}`)
                    .then(response => response.json())
                    .then(data => {
-                       const items = data.map(country => ({ 
-                           value: country.cca3, 
+                       const items = data.map(country => ({
+                           value: country.cca3,
                            label: country.name.common,
-                           group: country.region 
+                           group: country.region
                        }));
                        update(items);
                    })
@@ -150,37 +152,37 @@ import 'ag-grid-autocomplete/dist/main.css';
 
 ### Cell Editor Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `selectData` | `Array` or `fn(params: IAutocompleteSelectCellEditorParams)` | Data source for autocomplete suggestions with format `{value: string, label: string, group?: string}` |
-| `placeholder` | String | Input field placeholder text |
-| `required` | `boolean` | Whether to cancel changes if no selection made (default: `false`) |
-| `autocomplete` | Object | Configuration for the autocomplete behavior (see below) |
+| Parameter      | Type                                                         | Description                                                                                           |
+| -------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `selectData`   | `Array` or `fn(params: IAutocompleteSelectCellEditorParams)` | Data source for autocomplete suggestions with format `{value: string, label: string, group?: string}` |
+| `placeholder`  | String                                                       | Input field placeholder text                                                                          |
+| `required`     | `boolean`                                                    | Whether to cancel changes if no selection made (default: `false`)                                     |
+| `autocomplete` | Object                                                       | Configuration for the autocomplete behavior (see below)                                               |
 
 ### Autocomplete Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `className` | `string` | `'ag-cell-editor-autocomplete'` | CSS class for the autocomplete dropdown |
-| `minLength` | `number` | `1` | Minimum character length to trigger suggestions |
-| `showOnFocus` | `boolean` | `false` | Show suggestions when input is focused |
-| `emptyMsg` | `string` | `'None'` | Message when no results match |
-| `strict` | `boolean` | `true` | Only allow selection from the dropdown |
-| `autoselectfirst` | `boolean` | `true` | Auto-select first item in dropdown |
-| `debounceWaitMs` | `number` | `200` | Debounce time for fetch requests |
-| `onFreeTextSelect` | Function | - | Called when user selects text not in suggestions (requires `strict: false`) |
+| Option             | Type      | Default                         | Description                                                                 |
+| ------------------ | --------- | ------------------------------- | --------------------------------------------------------------------------- |
+| `className`        | `string`  | `'ag-cell-editor-autocomplete'` | CSS class for the autocomplete dropdown                                     |
+| `minLength`        | `number`  | `1`                             | Minimum character length to trigger suggestions                             |
+| `showOnFocus`      | `boolean` | `false`                         | Show suggestions when input is focused                                      |
+| `emptyMsg`         | `string`  | `'None'`                        | Message when no results match                                               |
+| `strict`           | `boolean` | `true`                          | Only allow selection from the dropdown                                      |
+| `autoselectfirst`  | `boolean` | `true`                          | Auto-select first item in dropdown                                          |
+| `debounceWaitMs`   | `number`  | `200`                           | Debounce time for fetch requests                                            |
+| `onFreeTextSelect` | Function  | -                               | Called when user selects text not in suggestions (requires `strict: false`) |
 
 ### Custom Rendering Functions
 
 The following functions can be customized for advanced control:
 
-| Function | Parameters | Description |
-|----------|------------|-------------|
-| `render` | `(cellEditor, item, currentValue)` | Customize rendering of each suggestion |
-| `renderGroup` | `(cellEditor, groupName)` | Customize rendering of group headers |
-| `onSelect` | `(cellEditor, item)` | Called when an item is selected |
-| `fetch` | `(cellEditor, text, update)` | Custom function to retrieve and filter suggestions |
-| `customize` | `(cellEditor, input, inputRect, container, maxHeight)` | Customize autocomplete dropdown position and appearance |
+| Function      | Parameters                                             | Description                                             |
+| ------------- | ------------------------------------------------------ | ------------------------------------------------------- |
+| `render`      | `(cellEditor, item, currentValue)`                     | Customize rendering of each suggestion                  |
+| `renderGroup` | `(cellEditor, groupName)`                              | Customize rendering of group headers                    |
+| `onSelect`    | `(cellEditor, item)`                                   | Called when an item is selected                         |
+| `fetch`       | `(cellEditor, text, update)`                           | Custom function to retrieve and filter suggestions      |
+| `customize`   | `(cellEditor, input, inputRect, container, maxHeight)` | Customize autocomplete dropdown position and appearance |
 
 ```js
 cellEditorParams: {
