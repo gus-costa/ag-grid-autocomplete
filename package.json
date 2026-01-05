@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/gus-costa/ag-grid-autocomplete.git"
+    "url": "git+https://github.com/gus-costa/ag-grid-autocomplete.git"
   },
   "scripts": {
     "build": "webpack --config config/webpack.prod.js --progress --profile --bail",
@@ -55,7 +55,7 @@
     "ag-grid-autocomplete-editor"
   ],
   "peerDependencies": {
-    "@ag-grid-community/core": ">= 23 < 33"
+    "ag-grid-community": ">= 23"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
@@ -65,7 +65,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "ag-grid-autocomplete": "file:./",
-    "ag-grid-community": "^32.3.4",
+    "ag-grid-community": "^33.0.0",
     "autoprefixer": "10.2.5",
     "css-loader": "5.2.2",
     "cypress": "^14.2.0",

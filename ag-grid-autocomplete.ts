@@ -1,4 +1,4 @@
-import { GridApi, ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from '@ag-grid-community/core'
+import { GridApi, ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from 'ag-grid-community'
 import { IAutocompleteSelectCellEditorParameters, DataFormat, IAutocompleterSettings } from './types'
 import createGridOptionsAdapter from './src/adapters/grid-options-adapter'
 import { IGridOptionsAdapter } from './src/adapters/grid-options-interfaces'

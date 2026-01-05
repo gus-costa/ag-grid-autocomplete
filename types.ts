@@ -1,4 +1,4 @@
-import { ICellEditorParams, PopupComponent } from '@ag-grid-community/core'
+import { ICellEditorParams, PopupComponent } from 'ag-grid-community'
 
 import { AutocompleteItem, EventTrigger } from './autocompleter/types'
 

@@ -10,7 +10,7 @@ module.exports = {
   entry: './index.ts',
 
   externals: {
-    '@ag-grid-community/core': '@ag-grid-community/core',
+    'ag-grid-community': 'ag-grid-community',
   },
 
   output: {

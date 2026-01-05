@@ -10,7 +10,7 @@ module.exports = {
   entry: './index.ts',
 
   externals: {
-    '@ag-grid-community/core': '../deps-cache/node_modules/ag-grid-community-' + process.env.AG_GRID_VERSION,
+    'ag-grid-community': '../deps-cache/node_modules/ag-grid-community-' + process.env.AG_GRID_VERSION,
   },
 
   output: {
