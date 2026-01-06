@@ -239,7 +239,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
         if (event instanceof KeyboardEvent || event instanceof event.view!.document.defaultView!.KeyboardEvent) {
           this.handleTabEvent(event)
         } else {
-          this.destroy()
+          this.selectAndClose()
         }
         return result
       },
@@ -287,7 +287,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
         this.gridApi.tabToNextCell()
       }
     } else {
-      this.destroy()
+      this.selectAndClose()
     }
   }
 
@@ -309,6 +309,13 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     }
   }
 
+  private selectAndClose() {
+    this.focusOut()
+    if (this.stopEditing) {
+      this.stopEditing()
+    }
+  }
+
   focusIn(): void {
     this.eInput.focus()
     this.eInput.select()
@@ -317,13 +324,6 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   focusOut(): void {
     this.eInput.blur()
     this.autocompleter.destroy()
-  }
-
-  destroy(): void {
-    this.focusOut()
-    if (this.stopEditing) {
-      this.stopEditing()
-    }
   }
 
   getValue(): DataFormat | undefined {

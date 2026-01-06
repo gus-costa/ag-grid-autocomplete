@@ -91,7 +91,7 @@ describe('ag-grid-autocomplete end-to-end clicks tests', () => {
     cy.get('[row-index="0"] > [aria-colindex="1"]').type('Kelley Santana')
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('exist')
     // Should dismiss the value after click outside the editor
-    cy.get('[row-index="1"] > [aria-colindex="1"]').realClick()
+    cy.get('[row-index="2"] > [aria-colindex="1"]').realClick()
     cy.get('.autocomplete.ag-cell-editor-autocomplete').should('not.exist')
     cy.get('[row-index="0"] > [aria-colindex="1"]').contains('Kelley Santana').should('not.exist')
   })
