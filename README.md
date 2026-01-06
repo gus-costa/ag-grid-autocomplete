@@ -9,7 +9,12 @@ A powerful autocomplete cell editor for [ag-Grid](https://github.com/ag-grid/ag-
 
 > **Note:** This package is a direct, drop-in replacement for `ag-grid-autocomplete-editor` with enhanced compatibility for AG Grid v23-v33. All imports, APIs, and configurations work exactly the same - just update your package name!
 >
-> **Migrating to v33+:** If you're using the modular `@ag-grid-community/*` packages, you'll need to migrate to `ag-grid-community` to use AG Grid v33 and beyond. See the [official migration guide](https://ag-grid.com/javascript-data-grid/upgrading-to-ag-grid-33/) for details. If you prefer to keep using the modular packages, stay on AG Grid v32 or lower and use v1 of this library.
+> **v2 and AG Grid v33:** Version 2 of this library was released to support AG Grid v33+, which requires the `ag-grid-community` package (the modular `@ag-grid-community/*` packages were discontinued after v32). Choose your path:
+>
+> - **v2** — requires `ag-grid-community` package (supports AG Grid v23-v33+)
+> - **v1** — requires `@ag-grid-community/core` package (supports AG Grid v23-v32)
+>
+> See the [official AG Grid migration guide](https://ag-grid.com/javascript-data-grid/upgrading-to-ag-grid-33/) for details on the package changes.
 
 ## Why ag-grid-autocomplete?
 
