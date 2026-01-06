@@ -1,6 +1,8 @@
 import * as agGrid from './ag-grid'
 import getOptions from './get-options'
 
+let modulesRegistered = false
+
 function getGridOptions(columnDefs: agGrid.ColDef[], rowData: any[]): agGrid.GridOptions {
   return {
     columnDefs,
@@ -40,6 +42,12 @@ export default function createGrid(
   agGridVersion = 0,
 ): void {
   const gridOptions = getGridOptions(columnDefs, rowData)
+
+  // Register modules for v33+ (only once)
+  if (agGridVersion >= 33 && !modulesRegistered) {
+    agGrid.ModuleRegistry.registerModules([agGrid.AllCommunityModule])
+    modulesRegistered = true
+  }
 
   if (agGridVersion >= 31) {
     agGrid.createGrid(element, gridOptions)

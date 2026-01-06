@@ -75,9 +75,14 @@ function createStaticTempDir(versionDir) {
 }
 
 function writeImportFile(version) {
-  const importStatements = version ?
-    `export { ColDef, Grid, GridOptions, createGrid } from '../../deps-cache/node_modules/ag-grid-community-${version}'\n` :
-    `export { ColDef, Grid, GridOptions, createGrid } from 'ag-grid-community'\n`;
+  const versionNum = version ? Number.parseInt(version) : 33; // default dev dependency is v33
+  const exports = versionNum >= 33
+    ? 'ColDef, Grid, GridOptions, createGrid, ModuleRegistry, AllCommunityModule'
+    : 'ColDef, Grid, GridOptions, createGrid';
+
+  const importStatements = version
+    ? `export { ${exports} } from '../../deps-cache/node_modules/ag-grid-community-${version}'\n`
+    : `export { ${exports} } from 'ag-grid-community'\n`;
 
   writeFileSync(path.resolve(PROJECT_ROOT, './cypress/utils/ag-grid.ts'), importStatements);
 }
