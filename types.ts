@@ -9,21 +9,26 @@ export interface DataFormat extends AutocompleteItem {
 }
 
 export type AutocompleteClient = DataFormat & AutocompleteItem
-export interface IAutocompleterSettings<T extends AutocompleteItem, U extends PopupComponent> {
-  render?: (cellEditor: U, item: T, currentValue: string) => HTMLElement
-  renderGroup?: (cellEditor: U, name: string, currentValue: string) => HTMLElement
+
+/**
+ * Settings for the autocompleter component.
+ * The generic U parameter represents the component context passed to callbacks.
+ */
+export interface IAutocompleterSettings<T extends AutocompleteItem, U = unknown> {
+  render?: (context: U, item: T, currentValue: string) => HTMLElement
+  renderGroup?: (context: U, name: string, currentValue: string) => HTMLElement
   className?: string
   minLength?: number
   emptyMsg?: string
   strict?: boolean
   autoselectfirst?: boolean
-  onFreeTextSelect?: (cellEditor: U, item: T, input: HTMLInputElement) => void
-  onSelect?: (cellEditor: U, item: T | undefined, input: HTMLInputElement) => void
-  fetch?: (cellEditor: U, text: string, update: (items: T[] | false) => void, trigger?: EventTrigger) => void
+  onFreeTextSelect?: (context: U, item: T, input: HTMLInputElement) => void
+  onSelect?: (context: U, item: T | undefined, input: HTMLInputElement) => void
+  fetch?: (context: U, text: string, update: (items: T[] | false) => void, trigger?: EventTrigger) => void
   debounceWaitMs?: number
   showOnFocus?: boolean
   customize?: (
-    cellEditor: U,
+    context: U,
     input: HTMLInputElement,
     inputRect: DOMRect,
     container: HTMLDivElement,
@@ -31,6 +36,11 @@ export interface IAutocompleterSettings<T extends AutocompleteItem, U extends Po
   ) => void
 }
 
+/**
+ * Parameters for the AutocompleteSelectCellEditor.
+ * Note: U extends PopupComponent for backward compatibility with existing user code
+ * that accesses cell editor methods in callbacks.
+ */
 export interface IAutocompleteSelectCellEditorParameters<U extends PopupComponent> extends ICellEditorParams {
   autocomplete?: IAutocompleterSettings<DataFormat, U>
   selectData: Array<DataFormat> | ((parameters: IAutocompleteSelectCellEditorParameters<U>) => Array<DataFormat>)

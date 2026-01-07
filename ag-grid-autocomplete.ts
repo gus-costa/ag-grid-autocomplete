@@ -1,14 +1,14 @@
 import { GridApi, ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from 'ag-grid-community'
-import { IAutocompleteSelectCellEditorParameters, DataFormat, IAutocompleterSettings } from './types'
+import { IAutocompleteSelectCellEditorParameters, DataFormat } from './types'
 import createGridOptionsAdapter from './src/adapters/grid-options-adapter'
 import { IGridOptionsAdapter } from './src/adapters/grid-options-interfaces'
-
-import autocomplete from './autocompleter/autocomplete'
+import { AutocompleteInput, AutocompleteInputConfig } from './src/autocomplete-input'
 
 // use require instead of import to generate the .css file with webpack but avoid import into the .d.ts file
 // eslint-disable-next-line unicorn/prefer-module
 require('./ag-grid-autocomplete.scss')
 
+// Key codes (legacy numeric for v23-v26)
 const KEY_BACKSPACE = 8
 const KEY_DELETE = 46
 const KEY_ENTER = 13
@@ -16,7 +16,7 @@ const KEY_TAB = 9
 const KEY_UP = 38
 const KEY_DOWN = 40
 
-// New key string constants for eventKey
+// Key strings (modern for v27+)
 const KEY_BACKSPACE_STRING = 'Backspace'
 const KEY_DELETE_STRING = 'Delete'
 const KEY_ENTER_STRING = 'Enter'
@@ -33,16 +33,25 @@ const KeysHandledStrings = new Set([
   KEY_UP_STRING,
   KEY_DOWN_STRING,
 ])
-export default class AutocompleteSelectCellEditor extends PopupComponent implements ICellEditorComp {
-  public currentItem?: DataFormat
 
+/**
+ * Autocomplete cell editor for AG Grid.
+ * This is a thin wrapper around AutocompleteInput that handles AG Grid integration.
+ */
+export default class AutocompleteSelectCellEditor extends PopupComponent implements ICellEditorComp {
+  // The autocomplete input component
+  private autocompleteInput!: AutocompleteInput
+
+  // AG Grid integration
   private focusAfterAttached: boolean = false
 
-  private readonly eInput: HTMLInputElement
-
-  private autocompleter?: any
+  private startedByEnter: boolean = false
 
   private required: boolean = false
+
+  private gridApi?: GridApi
+
+  private gridOptionsAdapter!: IGridOptionsAdapter
 
   private stopEditing?: (cancel?: boolean) => void
 
@@ -51,214 +60,48 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
    */
   private backspaceTriggersEdit = true
 
-  private gridApi?: GridApi
-
-  private gridOptionsAdapter!: IGridOptionsAdapter
-
-  private static getSelectData(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
-  ): Array<DataFormat> {
-    if (typeof parameters.selectData === 'function') {
-      return parameters.selectData(parameters)
-    }
-
-    if (Array.isArray(parameters.selectData)) {
-      return parameters.selectData as Array<DataFormat>
-    }
-    return []
-  }
-
-  private static getDefaultAutocompleteSettings(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
-  ): Required<IAutocompleterSettings<DataFormat, AutocompleteSelectCellEditor>> {
-    return {
-      showOnFocus: false,
-      render(cellEditor, item, value) {
-        const itemElement = document.createElement('div')
-        const escapedValue = (value ?? '').replaceAll(/[$()*+.?[\\\]^{|}]/g, String.raw`\$&`)
-        const regex = new RegExp(escapedValue, 'gi')
-        const fieldItem = document.createElement('span')
-        fieldItem.innerHTML = item.label.replace(regex, function strongify(match: string) {
-          return `<strong>${match}</strong>`
-        })
-        itemElement.append(fieldItem)
-        const eventFunction = (event: MouseEvent) => {
-          // eslint-disable-next-line no-param-reassign
-          cellEditor.currentItem = item
-          event.stopPropagation()
-        }
-        if ('addManagedListeners' in cellEditor) {
-          // ag-grid v32+
-          ;(cellEditor as any).addManagedListeners(itemElement, { mousedown: eventFunction })
-        } else {
-          ;(cellEditor as any).addManagedListener(itemElement, 'mousedown', eventFunction)
-        }
-        return itemElement
-      },
-      renderGroup(_, name) {
-        const div = document.createElement('div')
-        div.textContent = name
-        div.className = 'group'
-        return div
-      },
-      className: 'ag-cell-editor-autocomplete',
-      minLength: 1,
-      emptyMsg: 'None',
-      strict: true,
-      autoselectfirst: true,
-      onFreeTextSelect() {},
-      onSelect(cellEditor, item: DataFormat | undefined) {
-        // eslint-disable-next-line no-param-reassign
-        cellEditor.currentItem = item
-      },
-      fetch: (cellEditor, text, callback) => {
-        const items = AutocompleteSelectCellEditor.getSelectData(parameters)
-        const match = text.toLowerCase() || cellEditor.eInput.value.toLowerCase()
-        callback(
-          items.filter(function caseInsensitiveIncludes(n) {
-            return n.label.toLowerCase().includes(match)
-          }),
-        )
-      },
-      debounceWaitMs: 200,
-      customize(_, input, inputRect, container, maxHeight) {
-        if (maxHeight < 100) {
-          /* eslint-disable no-param-reassign */
-          container.style.top = '10px'
-          container.style.bottom = `${window.innerHeight - inputRect.bottom + input.offsetHeight}px`
-          container.style.maxHeight = '140px'
-          /* eslint-enable no-param-reassign */
-        }
-      },
-    }
-  }
-
-  /**
-   * Determines whether a keyboard event should be suppressed in a grid cell.
-   * Supports both modern (key-based) and legacy (keyCode-based) keyboard event handling.
-   *
-   * @param parameters - Event parameters from ag-grid
-   * @param isRequired - Whether the cell represents a required field
-   * @param backspaceTriggersEdit - Whether pressing backspace should trigger cell editing
-   * @param isVersionGte28 - Whether using ag-grid version 28 or greater (which changed edit behavior)
-   * @returns True if the event should be suppressed, false otherwise
-   */
-  private static suppressKeyboardEvent(
-    parameters: SuppressKeyboardEventParams,
-    isRequired = false,
-    backspaceTriggersEdit = true,
-    isVersionGte28 = false,
-  ): boolean {
-    // Check for both keyCode (deprecated) and key (new string-based approach)
-    // eslint-disable-next-line sonarjs/deprecation
-    const { keyCode } = parameters.event
-    const { key } = parameters.event
-
-    // Handle both numeric keyCode and string key approaches
-    if (parameters.editing && (key ? KeysHandledStrings.has(key) : KeysHandled.has(keyCode))) {
-      return true
-    }
-
-    // Logic below this point is required only if we are using ag-grid>=28, field is required, and is not in edit mode
-    if (!isVersionGte28 || !isRequired || parameters.editing) {
-      return false
-    }
-
-    // If the user hits delete, prevent it as it doesn't trigger a cell edit anymore
-    if (key ? key === KEY_DELETE_STRING : keyCode === KEY_DELETE) {
-      return true
-    }
-
-    // If the user hits backspace and cell editing is not enabled, prevent it
-    return !backspaceTriggersEdit && (key ? key === KEY_BACKSPACE_STRING : keyCode === KEY_BACKSPACE)
-  }
-
-  private static getStartValue(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>) {
-    // Check for new eventKey (v27+) or fall back to keyPress for backward compatibility
-    // Use type assertion with 'as any' to access potentially undefined properties
-    // without modifying the interface definition
-    const eventKey = (parameters as any).eventKey as string
-    const keyPress = (parameters as any).keyPress as number
-
-    // Check for backspace or delete using either the string eventKey or numeric keyPress
-    const isBackspace = eventKey ? eventKey === KEY_BACKSPACE_STRING : keyPress === KEY_BACKSPACE
-    const isDelete = eventKey ? eventKey === KEY_DELETE_STRING : keyPress === KEY_DELETE
-    const keyPressBackspaceOrDelete = isBackspace || isDelete
-
-    if (keyPressBackspaceOrDelete) {
-      return ''
-    }
-    // Detecting if the pressed key is a character
-    if (parameters.eventKey?.length === 1) {
-      return parameters.eventKey
-    }
-    return parameters.formatValue(parameters.value)
-  }
-
   constructor() {
+    // Use the same wrapper structure as the original implementation
+    // This matches the template in AutocompleteInput for consistency
     super(
       '<div class="ag-wrapper ag-input-wrapper ag-text-field-input-wrapper ag-cell-editor-autocomplete-wrapper" style="padding: 0 !important;"><input class="ag-input-field-input ag-text-field-input ag-cell-editor-autocomplete-input" type="text"/></div>',
     )
-    this.eInput = this.getGui().querySelector('input') as HTMLInputElement
-    if (this.currentItem) {
-      this.eInput.value = this.currentItem.label || (this.currentItem.value as string)
-    }
   }
 
-  public init(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>) {
+  public init(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>): void {
     this.gridApi = parameters.api
     this.stopEditing = parameters.stopEditing
-    const defaultSettings = AutocompleteSelectCellEditor.getDefaultAutocompleteSettings(parameters)
     this.focusAfterAttached = parameters.cellStartedEdit
-
-    this.eInput.placeholder = parameters.placeholder || ''
-    this.eInput.value = AutocompleteSelectCellEditor.getStartValue(parameters)
-
-    const autocompleteParameters = { ...defaultSettings, ...parameters.autocomplete }
-
-    this.autocompleter = autocomplete<DataFormat>({
-      input: this.eInput,
-      render: (item: DataFormat, currentValue: string) => {
-        return autocompleteParameters.render(this, item, currentValue)
-      },
-      renderGroup: (name: string, currentValue: string) => {
-        return autocompleteParameters.renderGroup(this, name, currentValue)
-      },
-      className: autocompleteParameters.className,
-      minLength: autocompleteParameters.minLength,
-      emptyMsg: autocompleteParameters.emptyMsg,
-      strict: autocompleteParameters.strict,
-      autoselectfirst: autocompleteParameters.autoselectfirst,
-      showOnFocus: autocompleteParameters.showOnFocus,
-      onFreeTextSelect: (item: DataFormat, input: HTMLInputElement) => {
-        return autocompleteParameters.onFreeTextSelect(this, item, input)
-      },
-      onSelect: (item: DataFormat | undefined, input: HTMLInputElement, event: KeyboardEvent | MouseEvent) => {
-        const result = autocompleteParameters.onSelect(this, item, input)
-        // need the second argument because of cypress testing changing the view context
-        if (event instanceof KeyboardEvent || event instanceof event.view!.document.defaultView!.KeyboardEvent) {
-          this.handleTabEvent(event)
-        } else {
-          this.selectAndClose()
-        }
-        return result
-      },
-      fetch: (text: string, update: (items: DataFormat[] | false) => void, trigger) => {
-        return autocompleteParameters.fetch(this, text, update, trigger)
-      },
-      debounceWaitMs: autocompleteParameters.debounceWaitMs,
-      customize: (input: HTMLInputElement, inputRect: DOMRect, container: HTMLDivElement, maxHeight: number) => {
-        return autocompleteParameters.customize(this, input, inputRect, container, maxHeight)
-      },
-    })
-
-    if (parameters.required) {
-      this.required = true
-    }
+    this.startedByEnter = parameters.eventKey === KEY_ENTER_STRING
+    this.required = parameters.required ?? false
 
     // Create the grid options adapter based on the instance
     this.gridOptionsAdapter = createGridOptionsAdapter(this)
 
+    // The behavior for deleting cell values changed from v28 and beyond
+    if (this.gridOptionsAdapter.version >= 28) {
+      this.backspaceTriggersEdit = this.gridOptionsAdapter.isEnableCellEditingOnBackspace()
+    }
+
+    // Get the input element from our template
+    const inputElement = this.getGui().querySelector('input') as HTMLInputElement
+
+    // Create the autocomplete input component, passing our existing input element
+    this.autocompleteInput = new AutocompleteInput({
+      placeholder: parameters.placeholder,
+      initialValue: AutocompleteSelectCellEditor.getStartValue(parameters),
+      selectData: () => AutocompleteSelectCellEditor.getSelectData(parameters),
+      autocompleteSettings: this.transformAutocompleteSettings(parameters),
+      onSelect: (item, event) => {
+        this.handleSelection(item, event)
+      },
+      onItemMousedown: (item) => {
+        this.autocompleteInput.currentItem = item
+      },
+      inputElement,
+    })
+
+    // Setup keyboard suppression if not already configured
     if (!parameters.colDef.suppressKeyboardEvent) {
       // eslint-disable-next-line no-param-reassign
       parameters.colDef.suppressKeyboardEvent = (suppressParameters) =>
@@ -269,81 +112,236 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
           this.gridOptionsAdapter.version >= 28,
         )
     }
+  }
 
-    // The behavior for deleting cell values changed from v28 and beyond, so we need to track this option's value
-    if (this.gridOptionsAdapter.version >= 28) {
-      this.backspaceTriggersEdit = this.gridOptionsAdapter.isEnableCellEditingOnBackspace()
+  public afterGuiAttached(): void {
+    if (this.focusAfterAttached) {
+      this.autocompleteInput.focusAndSelect()
+      this.autocompleteInput.setCaretAtEnd()
+    }
+
+    // When started by Enter key, trigger the autocomplete dropdown
+    if (this.startedByEnter) {
+      setTimeout(() => {
+        this.autocompleteInput.triggerAutocomplete()
+      })
     }
   }
 
-  handleTabEvent(event: KeyboardEvent) {
+  public focusIn(): void {
+    this.autocompleteInput.focusAndSelect()
+  }
+
+  public focusOut(): void {
+    this.autocompleteInput.blur()
+    this.autocompleteInput.destroy()
+  }
+
+  public getValue(): DataFormat | undefined {
+    return this.autocompleteInput.getValue()
+  }
+
+  public isCancelAfterEnd(): boolean {
+    return this.required && !this.autocompleteInput.getValue()
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public isCancelBeforeStart(): boolean {
+    return false
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public override isPopup(): boolean {
+    return false
+  }
+
+  // For backward compatibility - expose currentItem
+  public get currentItem(): DataFormat | undefined {
+    return this.autocompleteInput?.currentItem
+  }
+
+  public set currentItem(value: DataFormat | undefined) {
+    if (this.autocompleteInput) {
+      this.autocompleteInput.currentItem = value
+    }
+  }
+
+  // Private methods
+
+  private handleSelection(item: DataFormat | undefined, event: KeyboardEvent | MouseEvent): void {
+    // Check if this was a keyboard event (Enter/Tab) vs mouse click
+    // Need the second check because of cypress testing changing the view context
+    const isKeyboardEvent =
+      event instanceof KeyboardEvent || event instanceof event.view!.document.defaultView!.KeyboardEvent
+
+    if (isKeyboardEvent) {
+      this.handleKeyboardSelection(event as KeyboardEvent)
+    } else if (item) {
+      this.selectAndClose()
+    }
+  }
+
+  private handleKeyboardSelection(event: KeyboardEvent): void {
     // eslint-disable-next-line sonarjs/deprecation
     const keyCode = event.which || event.keyCode || 0
 
     if (keyCode === KEY_TAB && this.gridApi) {
+      // Tab key - navigate to next/previous cell
       if (event.shiftKey) {
         this.gridApi.tabToPreviousCell()
       } else {
         this.gridApi.tabToNextCell()
       }
     } else {
+      // Enter key or other - just close
       this.selectAndClose()
     }
   }
 
-  afterGuiAttached(): void {
-    if (!this.focusAfterAttached) {
-      return
-    }
-
-    const { eInput } = this
-    eInput.focus()
-    eInput.select()
-    // when we started editing, we want the caret at the end, not the start.
-    // this comes into play in two scenarios: a) when user hits F2 and b)
-    // when user hits a printable character, then on IE (and only IE) the caret
-    // was placed after the first character, thus 'apply' would end up as 'pplea'
-    const length = eInput.value ? eInput.value.length : 0
-    if (length > 0) {
-      eInput.setSelectionRange(length, length)
-    }
-  }
-
-  private selectAndClose() {
+  private selectAndClose(): void {
     this.focusOut()
     if (this.stopEditing) {
       this.stopEditing()
     }
   }
 
-  focusIn(): void {
-    this.eInput.focus()
-    this.eInput.select()
-  }
-
-  focusOut(): void {
-    this.eInput.blur()
-    this.autocompleter.destroy()
-  }
-
-  getValue(): DataFormat | undefined {
-    return this.currentItem
-  }
-
-  isCancelAfterEnd(): boolean {
-    if (this.required) {
-      return !this.currentItem
+  /**
+   * Wraps a user-provided callback to inject the cell editor as the first parameter.
+   *
+   * This enables backward compatibility: users expect callbacks like `render(cellEditor, item, value)`,
+   * but internally AutocompleteInput uses simpler signatures like `render(item, value)`.
+   *
+   * @param callback - User's callback that expects the cell editor as first parameter
+   * @returns A wrapped function that injects `this` (the cell editor) as the first argument
+   *
+   * @example
+   * // User provides: (cellEditor, item, value) => HTMLElement
+   * // We transform to: (item, value) => userCallback(this, item, value)
+   * transformed.render = this.wrapCallback(userSettings.render)
+   */
+  private wrapCallback<Arguments extends any[], Return>(
+    callback: (context: this, ...arguments_: Arguments) => Return,
+  ): (...arguments_: Arguments) => Return {
+    // Capture `this` (the cell editor) via closure and prepend it to all calls
+    return (...arguments_: Arguments) => {
+      return callback(this, ...arguments_)
     }
-    return false
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  isCancelBeforeStart(): boolean {
-    return false
+  private transformAutocompleteSettings(
+    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
+  ): AutocompleteInputConfig['autocompleteSettings'] {
+    const userSettings = parameters.autocomplete
+    if (!userSettings) {
+      return {}
+    }
+
+    // Transform the settings to add AutocompleteInput as context to the callback functions
+    const transformed: AutocompleteInputConfig['autocompleteSettings'] = {}
+
+    if (userSettings.render) {
+      transformed.render = this.wrapCallback(userSettings.render)
+    }
+
+    if (userSettings.renderGroup) {
+      transformed.renderGroup = this.wrapCallback(userSettings.renderGroup)
+    }
+
+    if (userSettings.onFreeTextSelect) {
+      transformed.onFreeTextSelect = this.wrapCallback(userSettings.onFreeTextSelect)
+    }
+
+    if (userSettings.onSelect) {
+      transformed.onSelect = this.wrapCallback(userSettings.onSelect)
+    }
+
+    if (userSettings.fetch) {
+      transformed.fetch = this.wrapCallback(userSettings.fetch)
+    }
+
+    if (userSettings.customize) {
+      transformed.customize = this.wrapCallback(userSettings.customize)
+    }
+
+    // Copy non-function settings directly
+    if (userSettings.className !== undefined) transformed.className = userSettings.className
+    if (userSettings.minLength !== undefined) transformed.minLength = userSettings.minLength
+    if (userSettings.emptyMsg !== undefined) transformed.emptyMsg = userSettings.emptyMsg
+    if (userSettings.strict !== undefined) transformed.strict = userSettings.strict
+    if (userSettings.autoselectfirst !== undefined) transformed.autoselectfirst = userSettings.autoselectfirst
+    if (userSettings.showOnFocus !== undefined) transformed.showOnFocus = userSettings.showOnFocus
+    if (userSettings.debounceWaitMs !== undefined) transformed.debounceWaitMs = userSettings.debounceWaitMs
+
+    return transformed
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  isPopup(): boolean {
-    return false
+  // Static helper methods
+
+  private static getSelectData(
+    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
+  ): Array<DataFormat> {
+    if (typeof parameters.selectData === 'function') {
+      return parameters.selectData(parameters)
+    }
+    if (Array.isArray(parameters.selectData)) {
+      return parameters.selectData
+    }
+    return []
+  }
+
+  private static getStartValue(
+    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
+  ): string {
+    // Check for new eventKey (v27+) or fall back to keyPress for backward compatibility
+    const eventKey = (parameters as any).eventKey as string
+    const keyPress = (parameters as any).keyPress as number
+
+    // Check for backspace or delete using either the string eventKey or numeric keyPress
+    const isBackspace = eventKey ? eventKey === KEY_BACKSPACE_STRING : keyPress === KEY_BACKSPACE
+    const isDelete = eventKey ? eventKey === KEY_DELETE_STRING : keyPress === KEY_DELETE
+
+    if (isBackspace || isDelete) {
+      return ''
+    }
+
+    // Detecting if the pressed key is a character
+    if (parameters.eventKey?.length === 1) {
+      return parameters.eventKey
+    }
+
+    return parameters.formatValue(parameters.value) ?? ''
+  }
+
+  /**
+   * Determines whether a keyboard event should be suppressed in a grid cell.
+   * Supports both modern (key-based) and legacy (keyCode-based) keyboard event handling.
+   */
+  private static suppressKeyboardEvent(
+    suppressParameters: SuppressKeyboardEventParams,
+    isRequired = false,
+    backspaceTriggersEdit = true,
+    isVersionGte28 = false,
+  ): boolean {
+    // eslint-disable-next-line sonarjs/deprecation
+    const { keyCode } = suppressParameters.event
+    const { key } = suppressParameters.event
+
+    // Handle both numeric keyCode and string key approaches
+    if (suppressParameters.editing && (key ? KeysHandledStrings.has(key) : KeysHandled.has(keyCode))) {
+      return true
+    }
+
+    // Logic below this point is required only if we are using ag-grid>=28, field is required, and is not in edit mode
+    if (!isVersionGte28 || !isRequired || suppressParameters.editing) {
+      return false
+    }
+
+    // If the user hits delete, prevent it as it doesn't trigger a cell edit anymore
+    if (key ? key === KEY_DELETE_STRING : keyCode === KEY_DELETE) {
+      return true
+    }
+
+    // If the user hits backspace and cell editing is not enabled, prevent it
+    return !backspaceTriggersEdit && (key ? key === KEY_BACKSPACE_STRING : keyCode === KEY_BACKSPACE)
   }
 }
