@@ -16,17 +16,18 @@ echo "════════════════════════�
 echo "  TEST MATRIX"
 echo "══════════════════════════════════════════════════════════"
 
-for VERSION in $VERSIONS; do
-  # Build
-  echo ""
-  echo "v$VERSION: building... "
-  AG_GRID_VERSION=$VERSION npm run build:test > /dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    echo "❌ build failed"
-    FAILED_VERSIONS+=("$VERSION")
-    continue
-  fi
+# Build once before running tests
+echo ""
+echo "Building library..."
+npm run build:test > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed"
+  exit 1
+fi
+echo "✅ Build complete"
 
+for VERSION in $VERSIONS; do
+  echo ""
   echo "Testing against ag-grid-community@$VERSION"
 
   # Test with dot reporter (compact output)

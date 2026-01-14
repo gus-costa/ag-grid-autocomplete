@@ -26,7 +26,7 @@
     "clean": "rm -rf **/*.map **/*.d.ts *.d.ts *.map ag-grid-autocomplete.js dist/",
     "pretest": "npm run clean && npm run build",
     "test": "npx cypress run",
-    "test:matrix": "./test-helpers/cache-deps.sh && ./test-helpers/test-matrix.sh",
+    "test:matrix": "./test-helpers/test-matrix.sh",
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
