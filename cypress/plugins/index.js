@@ -1,8 +1,5 @@
 /// <reference types="cypress" />
 
-const { readFileSync, writeFileSync, existsSync, mkdirSync } = require("node:fs");
-const path = require("node:path");
-
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -16,7 +13,6 @@ const path = require("node:path");
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-const PROJECT_ROOT = path.resolve(__dirname, '../../');
 const DEFAULT_SANDBOX_FILE = './cypress/static/ag-grid-autocomplete-editor-test-sandbox.html';
 
 /**
@@ -27,7 +23,6 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
 
   on('after:run', () => {
-    writeImportFile(null);
   })
 
   config.env.SANDBOX_HTML_FILE = DEFAULT_SANDBOX_FILE;
@@ -37,52 +32,7 @@ module.exports = (on, config) => {
   if (process.env.AG_GRID_VERSION) {
     const version = Number.parseInt(process.env.AG_GRID_VERSION)
     config.env.AG_GRID_VERSION = version
-
-    const sandboxFile = writeSandboxFile(version);
-
-    config.env.SANDBOX_HTML_FILE = sandboxFile;
   }
-
-  writeImportFile(process.env.AG_GRID_VERSION);
 
   return config
-}
-
-function writeSandboxFile(version) {
-  const packageFolder = `deps-cache/node_modules/ag-grid-community-${version}`;
-  const sandboxFile = `./cypress/static/temp/ag-grid-autocomplete-editor-test-sandbox-${version}.html`;
-
-  createStaticTempDir(path.resolve(PROJECT_ROOT, './cypress/static/temp'));
-
-  const template = readFileSync(path.resolve(PROJECT_ROOT, DEFAULT_SANDBOX_FILE), { encoding: 'utf-8' });
-  let newFile = template
-    .replaceAll('node_modules/ag-grid-community', packageFolder)
-    .replaceAll('base href="../../"', 'base href="../../../"');
-
-  if (version < 29) {
-    newFile = newFile.replaceAll('styles/', 'dist/styles/')
-  }
-
-  writeFileSync(path.resolve(PROJECT_ROOT, sandboxFile), newFile);
-  return sandboxFile;
-}
-
-function createStaticTempDir(versionDir) {
-  if (existsSync(versionDir))
-    return;
-
-  mkdirSync(versionDir, { recursive: true });
-}
-
-function writeImportFile(version) {
-  const versionNum = version ? Number.parseInt(version) : 33; // default dev dependency is v33
-  const exports = versionNum >= 33
-    ? 'ColDef, Grid, GridOptions, createGrid, ModuleRegistry, AllCommunityModule'
-    : 'ColDef, Grid, GridOptions, createGrid';
-
-  const importStatements = version
-    ? `export { ${exports} } from '../../deps-cache/node_modules/ag-grid-community-${version}'\n`
-    : `export { ${exports} } from 'ag-grid-community'\n`;
-
-  writeFileSync(path.resolve(PROJECT_ROOT, './cypress/utils/ag-grid.ts'), importStatements);
 }

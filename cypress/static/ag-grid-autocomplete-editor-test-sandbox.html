@@ -4,14 +4,61 @@
     <meta charset="UTF-8" />
     <title>Ag-Grid-Autocomplete test</title>
     <base href="../../" />
-    <link href="/node_modules/ag-grid-community/styles/ag-grid.css" rel="stylesheet" />
-    <link href="/node_modules/ag-grid-community/styles/ag-theme-balham.css" rel="stylesheet" />
-    <link href="/node_modules/ag-grid-autocomplete/dist/main.css" rel="stylesheet" />
   </head>
   <body>
     <div>
       <h1>Ag-Grid-Autocomplete</h1>
       <div class="ag-theme-balham" id="myGrid" style="height: 300px"></div>
     </div>
+    <script>
+      // Get AG Grid version from URL parameter
+      const urlParams = new URLSearchParams(window.location.search)
+      const agVersion = urlParams.get('v')
+
+      // Dynamically load AG Grid based on version
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+          script.src = src
+          script.onload = resolve
+          script.onerror = reject
+          document.head.appendChild(script)
+        })
+      }
+
+      function loadStyles(href) {
+        return new Promise((resolve) => {
+          const link = document.createElement('link')
+          link.rel = 'stylesheet'
+          link.href = href
+          link.onload = resolve
+          document.head.appendChild(link)
+        })
+      }
+
+      async function initPage() {
+        if (!agVersion) {
+          console.error('AG Grid version not specified. Add ?v=XX to URL (e.g., ?v=34)')
+          return
+        }
+
+        try {
+          // Load AG Grid CSS and JS from CDN
+          await loadStyles(
+            `https://cdn.jsdelivr.net/npm/ag-grid-community@${agVersion}${agVersion < 28 ? '/dist' : ''}/styles/ag-grid.css`,
+          )
+          await loadStyles(
+            `https://cdn.jsdelivr.net/npm/ag-grid-community@${agVersion}${agVersion < 28 ? '/dist' : ''}/styles/ag-theme-balham.css`,
+          )
+          await loadStyles(`/node_modules/ag-grid-autocomplete/dist/main.css`)
+          await loadScript(`https://cdn.jsdelivr.net/npm/ag-grid-community@${agVersion}/dist/ag-grid-community.min.js`)
+        } catch (error) {
+          console.error(`Failed to load AG Grid v${agVersion} from CDN:`, error)
+        }
+      }
+
+      // Initialize page
+      initPage()
+    </script>
   </body>
 </html>

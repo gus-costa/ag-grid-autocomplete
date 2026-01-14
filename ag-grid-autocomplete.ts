@@ -1,4 +1,4 @@
-import { GridApi, ICellEditorComp, PopupComponent, SuppressKeyboardEventParams } from 'ag-grid-community'
+import { Component, GridApi, ICellEditorComp, SuppressKeyboardEventParams } from 'ag-grid-community'
 import { IAutocompleteSelectCellEditorParameters, DataFormat } from './types'
 import createGridOptionsAdapter from './src/adapters/grid-options-adapter'
 import { IGridOptionsAdapter } from './src/adapters/grid-options-interfaces'
@@ -34,11 +34,13 @@ const KeysHandledStrings = new Set([
   KEY_DOWN_STRING,
 ])
 
+type AutocompleteParameters = IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>
+
 /**
  * Autocomplete cell editor for AG Grid.
  * This is a thin wrapper around AutocompleteInput that handles AG Grid integration.
  */
-export default class AutocompleteSelectCellEditor extends PopupComponent implements ICellEditorComp {
+export default class AutocompleteSelectCellEditor extends Component implements ICellEditorComp {
   // The autocomplete input component
   private autocompleteInput!: AutocompleteInput
 
@@ -68,7 +70,11 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     )
   }
 
-  public init(parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>): void {
+  /**
+   * Initialize the cell editor
+   * @param parameters - Cell editor parameters from AG Grid
+   */
+  public init(parameters: AutocompleteParameters): void {
     this.gridApi = parameters.api
     this.stopEditing = parameters.stopEditing
     this.focusAfterAttached = parameters.cellStartedEdit
@@ -145,16 +151,6 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     return this.required && !this.autocompleteInput.getValue()
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public isCancelBeforeStart(): boolean {
-    return false
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  public override isPopup(): boolean {
-    return false
-  }
-
   // For backward compatibility - expose currentItem
   public get currentItem(): DataFormat | undefined {
     return this.autocompleteInput?.currentItem
@@ -229,7 +225,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
   }
 
   private transformAutocompleteSettings(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
+    parameters: AutocompleteParameters,
   ): AutocompleteInputConfig['autocompleteSettings'] {
     const userSettings = parameters.autocomplete
     if (!userSettings) {
@@ -277,9 +273,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
 
   // Static helper methods
 
-  private static getSelectData(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
-  ): Array<DataFormat> {
+  private static getSelectData(parameters: AutocompleteParameters): Array<DataFormat> {
     if (typeof parameters.selectData === 'function') {
       return parameters.selectData(parameters)
     }
@@ -289,9 +283,7 @@ export default class AutocompleteSelectCellEditor extends PopupComponent impleme
     return []
   }
 
-  private static getStartValue(
-    parameters: IAutocompleteSelectCellEditorParameters<AutocompleteSelectCellEditor>,
-  ): string {
+  private static getStartValue(parameters: AutocompleteParameters): string {
     // Check for new eventKey (v27+) or fall back to keyPress for backward compatibility
     const eventKey = (parameters as any).eventKey as string
     const keyPress = (parameters as any).keyPress as number

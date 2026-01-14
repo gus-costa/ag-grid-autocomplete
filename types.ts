@@ -1,4 +1,4 @@
-import { ICellEditorParams, PopupComponent } from 'ag-grid-community'
+import { Component, ICellEditorParams } from 'ag-grid-community'
 
 import { AutocompleteItem, EventTrigger } from './autocompleter/types'
 
@@ -41,7 +41,7 @@ export interface IAutocompleterSettings<T extends AutocompleteItem, U = unknown>
  * Note: U extends PopupComponent for backward compatibility with existing user code
  * that accesses cell editor methods in callbacks.
  */
-export interface IAutocompleteSelectCellEditorParameters<U extends PopupComponent> extends ICellEditorParams {
+export interface IAutocompleteSelectCellEditorParameters<U extends Component> extends ICellEditorParams {
   autocomplete?: IAutocompleterSettings<DataFormat, U>
   selectData: Array<DataFormat> | ((parameters: IAutocompleteSelectCellEditorParameters<U>) => Array<DataFormat>)
   placeholder?: string

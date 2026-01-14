@@ -1,12 +1,16 @@
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
+import { ColDef } from 'ag-grid-community'
 import createGrid from 'utils/create-grid'
-import { ColDef } from '../../../utils/ag-grid'
 
 describe('ag-grid-autocomplete end-to-end required option tests', () => {
+  const agVersion = Cypress.env('AG_GRID_VERSION')
+
+  beforeEach(() => {
+    cy.visit(`${Cypress.env('SANDBOX_HTML_FILE')}?v=${agVersion}`)
+  })
+
   it('should not remove actual value by starting edit with delete', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -35,7 +39,7 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -53,15 +57,13 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
     cy.get('.ag-row-first > .ag-cell ').type('{del}')
     // From ag-grid v28 and onwards hitting the delete key won't trigger cell edit
-    if (Cypress.env('AG_GRID_VERSION') < 28) {
+    if (agVersion < 28) {
       cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     }
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
   })
   it('should not remove actual value by starting edit with backspace', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -90,7 +92,7 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -112,8 +114,6 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
   })
   it('should keep last valid value if new value does not match any item', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -142,7 +142,7 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -165,8 +165,6 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
   })
   it('should keep last valid value if isCancelBeforeEnd called', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -195,7 +193,7 @@ describe('ag-grid-autocomplete end-to-end required option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')

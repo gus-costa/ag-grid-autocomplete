@@ -1,15 +1,15 @@
-import * as agGrid from './ag-grid'
+import { ColDef, GridOptions } from 'ag-grid-community'
 import getOptions from './get-options'
 
 let modulesRegistered = false
 
-function getGridOptions(columnDefs: agGrid.ColDef[], rowData: any[]): agGrid.GridOptions {
+function getGridOptions(columnDefs: ColDef[], rowData: any[]): GridOptions {
   return {
     columnDefs,
     rowData,
     suppressScrollOnNewData: false,
     suppressBrowserResizeObserver: true,
-    ...getOptions<agGrid.GridOptions>(Cypress.env('AG_GRID_VERSION'), 'gridOptions'),
+    ...getOptions<GridOptions>(Cypress.env('AG_GRID_VERSION'), 'gridOptions'),
   }
 }
 
@@ -21,7 +21,7 @@ function getGridOptions(columnDefs: agGrid.ColDef[], rowData: any[]): agGrid.Gri
  * the new `createGrid` factory function. For older versions, it uses the `Grid` constructor.
  *
  * @param {HTMLElement} element - The DOM element where the grid will be rendered
- * @param {agGrid.ColDef[]} columnDefs - Column definitions for the grid
+ * @param {ColDef[]} columnDefs - Column definitions for the grid
  * @param {any[]} rowData - Data to be displayed in the grid
  * @param {number} [agGridVersion=0] - AG Grid version number to determine API compatibility
  *
@@ -37,10 +37,18 @@ function getGridOptions(columnDefs: agGrid.ColDef[], rowData: any[]): agGrid.Gri
  */
 export default function createGrid(
   element: HTMLElement,
-  columnDefs: agGrid.ColDef[],
+  columnDefs: ColDef[],
   rowData: any[],
   agGridVersion = 0,
 ): void {
+  // Get the window from the element's document to ensure we're in the correct context
+  const win = element.ownerDocument.defaultView as Window
+  const { agGrid } = win as any
+
+  if (!agGrid) {
+    throw new Error(`AG Grid v${agGridVersion} not loaded. Ensure the sandbox HTML loads AG Grid from CDN.`)
+  }
+
   const gridOptions = getGridOptions(columnDefs, rowData)
 
   // Register modules for v33+ (only once)

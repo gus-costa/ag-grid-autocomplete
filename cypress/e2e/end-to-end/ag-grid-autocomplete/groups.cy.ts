@@ -1,12 +1,16 @@
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
+import { ColDef } from 'ag-grid-community'
 import createGrid from 'utils/create-grid'
-import { ColDef } from '../../../utils/ag-grid'
 
 describe('ag-grid-autocomplete end-to-end groups option tests', () => {
+  const agVersion = Cypress.env('AG_GRID_VERSION')
+
+  beforeEach(() => {
+    cy.visit(`${Cypress.env('SANDBOX_HTML_FILE')}?v=${agVersion}`)
+  })
+
   it('should render groups when the data is present', function () {
     cy.fixture('selectDatas/groups.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -35,7 +39,7 @@ describe('ag-grid-autocomplete end-to-end groups option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -49,8 +53,6 @@ describe('ag-grid-autocomplete end-to-end groups option tests', () => {
   })
   it('should render group multiples time in data order foreach group change', function () {
     cy.fixture('selectDatas/groups.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     const dataToAdd = [
       {
         value: 11,
@@ -91,7 +93,7 @@ describe('ag-grid-autocomplete end-to-end groups option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -110,8 +112,6 @@ describe('ag-grid-autocomplete end-to-end groups option tests', () => {
   })
   it('should switch from elements from one group into another when keydown', function () {
     cy.fixture('selectDatas/groups.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -140,7 +140,7 @@ describe('ag-grid-autocomplete end-to-end groups option tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')

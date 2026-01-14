@@ -1,12 +1,16 @@
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete'
+import { ColDef } from 'ag-grid-community'
 import createGrid from 'utils/create-grid'
-import { ColDef } from '../../../utils/ag-grid'
 
 describe('ag-grid-autocomplete end-to-end basic tests', () => {
+  const agVersion = Cypress.env('AG_GRID_VERSION')
+
+  beforeEach(() => {
+    cy.visit(`${Cypress.env('SANDBOX_HTML_FILE')}?v=${agVersion}`)
+  })
+
   it('should create an ag-grid with some AutocompleteSelectCellEditor without crash', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -34,7 +38,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -45,8 +49,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should create and enter edit mode with AutocompleteSelectCellEditor when cell clicked then Enter pressed', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -74,7 +76,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -87,8 +89,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should create input taking the entire space of the column', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -117,7 +117,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -135,8 +135,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should close opened input when Enter hit', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -164,7 +162,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -182,8 +180,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should close opened input when Tab hit and open it into next row', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -211,7 +207,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -233,8 +229,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should show selection list when some text is typed in search', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -262,7 +256,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -277,8 +271,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should show selection list with regexIsh data', function () {
     cy.fixture('selectDatas/regexish.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -307,7 +299,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -329,8 +321,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should select autocomplete the data and put it into ag-grid when Enter hit 1st', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -358,7 +348,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -376,8 +366,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should select autocomplete the data and put it into ag-grid when Enter hit 2nd', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -405,7 +393,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -424,8 +412,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should select autocomplete the data and put it into ag-grid and go to next row when Tab hit', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -453,7 +439,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -473,8 +459,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should select autocomplete the data and put it into ag-grid and go the the next column in edit mode when Tab hit', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined, 'second-column': undefined },
@@ -507,7 +491,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -528,8 +512,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should select autocomplete the data and put it into ag-grid and go the the next column in edit mode when Tab hit and focus the input field', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined, 'second-column': undefined },
@@ -574,7 +556,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -608,8 +590,6 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
   })
   it('should remove actual value by starting edit with delete', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -637,7 +617,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
@@ -655,15 +635,13 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('exist')
     cy.get('.ag-row-first > .ag-cell ').type('{del}')
     // From ag-grid v28 and onwards hitting the delete key won't trigger cell edit
-    if (Cypress.env('AG_GRID_VERSION') < 28) {
+    if (agVersion < 28) {
       cy.get('.ag-row-first > .ag-cell ').type('{enter}')
     }
     cy.get('.ag-row-first > .ag-cell ').contains('Kenya Gallagher').should('not.exist')
   })
   it('should remove actual value by starting edit with backspace', function () {
     cy.fixture('selectDatas/names.json').as('selectDatas')
-    // @ts-ignore
-    cy.visit(Cypress.env('SANDBOX_HTML_FILE'))
     cy.get('#myGrid').then((indexQueryElement) => {
       const rowDatas = [
         { 'autocomplete-column': undefined },
@@ -691,7 +669,7 @@ describe('ag-grid-autocomplete end-to-end basic tests', () => {
           editable: true,
         },
       ]
-      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, Cypress.env('AG_GRID_VERSION'))
+      createGrid(<HTMLElement>indexQueryElement.get(0), columnDefs, rowDatas, agVersion)
     })
     // ag-grid should be created on the DOM
     cy.get('.ag-root').should('exist')
