@@ -82,7 +82,7 @@ export default class AutocompleteSelectCellEditor extends Component implements I
     this.required = parameters.required ?? false
 
     // Create the grid options adapter based on the instance
-    this.gridOptionsAdapter = createGridOptionsAdapter(this)
+    this.gridOptionsAdapter = createGridOptionsAdapter(this.gridApi)
 
     // The behavior for deleting cell values changed from v28 and beyond
     if (this.gridOptionsAdapter.version >= 28) {

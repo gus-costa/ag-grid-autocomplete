@@ -1,26 +1,28 @@
 import GridOptionsV24Adapter from './grid-options-v24-adapter'
-import GridOptionsV28Adapter from './grid-options-v28-adapter'
+import GridOptionsV25Adapter from './grid-options-v25-adapter'
 import GridOptionsV29Adapter from './grid-options-v29-adapter'
-import GridOptionsV31Adapter from './grid-options-v31-adapter'
+import GridOptionsV30Adapter from './grid-options-v30-adapter'
+import GridOptionsV32Adapter from './grid-options-v32-adapter'
 import { IGridOptionsAdapter } from './grid-options-interfaces'
 
 /**
  * Factory function to create the appropriate adapter based on the available properties
  */
 export default function createGridOptionsAdapter(gridInstance: any): IGridOptionsAdapter {
+  if (!('context' in gridInstance)) {
+    return new GridOptionsV32Adapter(gridInstance)
+  }
   if ('gos' in gridInstance) {
-    // gridOptionsService was renamed to gos on v31.3.0
-    return new GridOptionsV31Adapter(gridInstance.gos)
+    // gos (gridOptionsService shorthand) exists on gridApi in v30-v31
+    return new GridOptionsV30Adapter(gridInstance.gos)
   }
   if ('gridOptionsService' in gridInstance) {
-    if ('in' in gridInstance.gridOptionsService) {
-      return new GridOptionsV29Adapter(gridInstance.gridOptionsService)
-    }
-    // Method `in` was removed from `gridOptionsService` on V31.0.0
-    return new GridOptionsV31Adapter(gridInstance.gridOptionsService)
+    // gridOptionsService exists on gridApi only in v29 (v30+ replaced it with gos)
+    return new GridOptionsV29Adapter(gridInstance.gridOptionsService)
   }
-  if ('gridOptionsWrapper' in gridInstance) {
-    return new GridOptionsV28Adapter(gridInstance.gridOptionsWrapper)
+  if ('setGridAriaProperty' in gridInstance) {
+    // setGridAriaProperty was introduced on v25
+    return new GridOptionsV25Adapter(gridInstance.gridOptionsWrapper)
   }
   return new GridOptionsV24Adapter()
 }

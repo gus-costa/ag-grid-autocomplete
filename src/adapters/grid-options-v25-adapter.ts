@@ -1,15 +1,15 @@
 import { IGridOptionsAdapter } from './grid-options-interfaces'
 
 /**
- * Adapter implementation for AG Grid v28
+ * Adapter implementation for AG Grid v25-28
  * Uses gridOptionsWrapper
  */
-export default class GridOptionsV28Adapter implements IGridOptionsAdapter {
-  version: 27 | 28
+export default class GridOptionsV25Adapter implements IGridOptionsAdapter {
+  version: 25 | 28
 
   constructor(private readonly gridOptionsWrapper: any) {
     // isEnableCellEditingOnBackspace is new on version 28, so it is safe to assume v28+
-    this.version = typeof this.gridOptionsWrapper.isEnableCellEditingOnBackspace === 'function' ? 28 : 27
+    this.version = typeof this.gridOptionsWrapper.isEnableCellEditingOnBackspace === 'function' ? 28 : 25
   }
 
   isEnableCellEditingOnBackspace(): boolean {
