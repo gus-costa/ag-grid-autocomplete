@@ -7,11 +7,11 @@
 
 A powerful autocomplete cell editor for [ag-Grid](https://github.com/ag-grid/ag-grid) that enhances data selection with typeahead functionality, grouping capabilities, and flexible data retrieval.
 
-> **Note:** This package is a direct, drop-in replacement for `ag-grid-autocomplete-editor` with enhanced compatibility for AG Grid v23-v34. All imports, APIs, and configurations work exactly the same - just update your package name!
+> **Note:** This package is a direct, drop-in replacement for `ag-grid-autocomplete-editor` with enhanced compatibility for AG Grid v23-v35. All imports, APIs, and configurations work exactly the same - just update your package name!
 >
 > **v2 and AG Grid v33:** Version 2 of this library was released to support AG Grid v33+, which requires the `ag-grid-community` package (the modular `@ag-grid-community/*` packages were discontinued after v32). Choose your path:
 >
-> - **v2** — requires `ag-grid-community` package (supports AG Grid v23-v34+)
+> - **v2** — requires `ag-grid-community` package (supports AG Grid v23-v35+)
 > - **v1** — requires `@ag-grid-community/core` package (supports AG Grid v23-v32)
 >
 > See the [official AG Grid migration guide](https://ag-grid.com/javascript-data-grid/upgrading-to-ag-grid-33/) for details on the package changes.
@@ -24,7 +24,7 @@ Data grids often struggle with selection interfaces for large datasets. Traditio
 - Support for grouped options with visual hierarchy
 - Local and remote data source flexibility
 - Keyboard navigation and accessibility features
-- Full compatibility with all AG Grid versions from v23 to v34
+- Full compatibility with all AG Grid versions from v23 to v35
 
 ## Installation
 
@@ -57,7 +57,7 @@ import 'ag-grid-autocomplete/dist/main.css'
 - **Remote Data** - Fetch options from APIs with built-in debouncing
 - **Grouped Options** - Organize related choices with intuitive grouping
 - **Free Text Support** - Allow users to enter custom values when needed
-- **Broad Compatibility** - Works with AG Grid v23 through v34
+- **Broad Compatibility** - Works with AG Grid v23 through v35
 
 ## Usage Examples
 

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ag-grid-autocomplete is a cell editor component for AG Grid that provides autocomplete/typeahead functionality. It extends AG Grid's `PopupComponent` and implements `ICellEditorComp`.
 
-**Version compatibility:** Supports AG Grid v23-v34+ via adapter pattern for handling API differences across versions.
+**Version compatibility:** Supports AG Grid v23-v35+ via adapter pattern for handling API differences across versions.
 
 ## Commands
 
@@ -16,7 +16,7 @@ npm run build:watch    # Watch mode
 npm run lint           # ESLint
 npm run lint:fix       # ESLint with auto-fix
 npm test               # Run Cypress tests (builds first)
-npm run test:matrix    # Run tests against all AG Grid versions (v23-v34)
+npm run test:matrix    # Run tests against all AG Grid versions (v23-v35)
 ```
 
 ### Running a single Cypress test
@@ -107,7 +107,7 @@ Tab key navigation is handled specially:
 
 The separation of `AutocompleteSelectCellEditor` and `AutocompleteInput` provides:
 
-1. **Isolated AG Grid changes** - Breaking API changes in AG Grid v34+ only affect the cell editor wrapper
+1. **Isolated AG Grid changes** - Breaking API changes in AG Grid only affect the cell editor wrapper
 2. **Reusable core logic** - `AutocompleteInput` can be used standalone or in non-AG-Grid contexts
 3. **Easier testing** - Core autocomplete behavior can be tested independently
 4. **Clear boundaries** - AG Grid-specific code (adapters, keyboard suppression) stays in one place
