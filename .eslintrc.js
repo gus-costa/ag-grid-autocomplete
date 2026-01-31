@@ -22,6 +22,20 @@ const CYPRESS_TS_OVERRIDE = {
     'import/no-extraneous-dependencies': 'off',
     'unicorn/prevent-abbreviations': ['error', { allowList: { ColDef: true } }],
   },
+  overrides: [
+    {
+      files: ['cypress/support/commands.ts'],
+      rules: {
+        'unicorn/no-empty-file': 'off',
+      },
+    },
+    {
+      files: ['cypress/support/e2e.ts'],
+      rules: {
+        'unicorn/prevent-abbreviations': 'off',
+      },
+    },
+  ],
 }
 
 const TS_OVERRIDE = {

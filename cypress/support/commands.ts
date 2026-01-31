@@ -1,3 +1,4 @@
+// eslint unicorn/no-empty-file: "off"
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
