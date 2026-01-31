@@ -110,7 +110,12 @@
   },
   "release": {
     "branches": [
-      "main"
+      "main",
+      {
+        "name": "v2",
+        "channel": "next",
+        "prerelease": "rc"
+      }
     ]
   },
   "types": "types/index.d.ts"
